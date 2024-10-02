@@ -24,7 +24,7 @@ As we know, genes provide instructions to make proteins, which perform some func
 
 </p>
 
-Different biological processes, as well as mutations, can affect which genes are turned on and which are turned off, in addition to, *how much* specific genes are turned on/off.
+Different biological processes, as well as mutations, can affect which genes are turned on and which are turned off, in addition to *how much* specific genes are turned on/off.
 
 To make proteins, the DNA is transcribed into messenger RNA, or mRNA, which is translated by the ribosome into protein. However, some genes encode RNA that does not get translated into protein; these RNAs are called non-coding RNAs, or ncRNAs. Often these RNAs have a function in and of themselves and include rRNAs, tRNAs, and siRNAs, among others. All RNAs transcribed from genes are called transcripts.
 
@@ -193,7 +193,7 @@ After cluster generation, fluorescently-tagged nucleotides are incorporated one 
 
 #### Base Calling
 
-Illumina has a proprietary software that goes through all the images captured in the previous stage and generates text files with sequence information about each cluster based on the levels of fluorescence observed. In addition to calling the bases, this software assigns a probablity score to indicate how certain it was about the calling something an "A", a "T", a "G" or a "C".
+Illumina has a proprietary software that goes through all the images captured in the previous stage and generates text files with sequence information about each cluster based on the levels of fluorescence observed. In addition to calling the bases, this software assigns a probability score to indicate how certain it was about the calling something an "A", a "T", a "G" or a "C". 
 
 <p align="center">
 

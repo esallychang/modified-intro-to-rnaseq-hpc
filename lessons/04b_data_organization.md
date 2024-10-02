@@ -1,8 +1,8 @@
 ---
 title: Data Management and Project Organization - In-class
-author: Mary Piper, Meeta Mistry, Michael Steinbaugh, Radhika Khetani, Jihe Liu
-date: November 9, 2020
-duration: 35
+author: Modified by Sally Chang @ NICHD 
+date: October 2024
+duration: 
 ---
 
 [Data management slides]: https://github.com/hbc/NGS-Data-Analysis-long-course/raw/Fall_2016/sessionI/slides/data_management.pdf
@@ -42,7 +42,7 @@ Some relevant metadata for our dataset is provided below:
 
 ## Implementing data management best practices
 
-In a [previous lesson](../04a_data_organization.md) we describe the data lifecycle and the **different aspects to consider when working on your own projects**. Here, we implement some of those strategies to get ourselves setup before we begin with any analysis.
+In a [previous lesson](https://hbctraining.github.io/Intro-to-rnaseq-hpc-salmon-flipped/lessons/04a_data_organization.html) we describe the data lifecycle and the **different aspects to consider when working on your own projects**. Here, we implement some of those strategies to get ourselves setup before we begin with any analysis.
 
 <p align="center">
 <img src="../img/data-lifecycle-base.png" width="500">
@@ -59,7 +59,7 @@ $ cd
 $ pwd
 ```
 
-This should return `/home/rc_training`. Create the directory `rnaseq` and move into it.
+This should return `/data/$USER/rc_training`. Create the directory `rnaseq` and move into it.
 
 ```bash
 $ mkdir rnaseq

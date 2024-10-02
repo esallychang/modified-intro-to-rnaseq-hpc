@@ -1,7 +1,7 @@
 ---
 title: "Experimental design considerations"
-author: "Mary Piper, Meeta Mistry, Radhika Khetani"
-date: "Thursday, June 20, 2019"
+author: "Mary Piper, Meeta Mistry, Radhika Khetani - Edited by Sally Chang at NICHD"
+date: "Edited Thursday, Sept. 26th 2024"
 ---
 
 Approximate time: 50 minutes
