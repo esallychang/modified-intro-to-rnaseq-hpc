@@ -95,15 +95,38 @@ $ mkdir logs meta raw_data results scripts
 > Another aspect of staying organized is making sure that all the directories and filenames for an analysis are as consistent as possible. You want to avoid names like `alignment1.bam`, and rather have names like `20170823_kd_rep1_gmap-1.4.bam` which provide a basic level of information about the file. [This link](https://datamanagement.hms.harvard.edu/file-naming-conventions) and [this slideshow](http://www2.stat.duke.edu/~rcs46/lectures_2015/01-markdown-git/slides/naming-slides/naming-slides.pdf) have some good guidelines for file naming dos and don'ts.
 
 
-### Documentation
+### Documentation - Create a worklog
 
 In your lab notebook, you likely keep track of the different reagents and kits used for a specific protocol. Similarly, recording information about the tools used in the workflow is important for documenting your computational experiments. 
 
+Here are some things you might want to make a note of: 
 - **Make note of the software you use.** Do your research and find out what tools are best for the data you are working with. Don't just work with tools that you are able to easily install.
 - **Keep track of software versions.** Keep up with the literature and make sure you are using the most up-to-date versions.
 - **Record information on parameters used and summary statistics** at every step (e.g., how many adapters were removed, how many reads did not align)
     - A general rule of thumb is to test on a single sample or a subset of the data before running your entire dataset through. This will allow you to debug quicker and give you a chance to also get a feel for the tool and the different parameters.
     - Different tools have different ways of reporting log messages to the terminal. You might have to experiment a bit to figure out what output to capture. You can redirect standard output with the `>` symbol which is equivalent to `1> (standard out)`; other tools might require you to use `2>` to re-direct the `standard error` instead.
+    
+#### Creating a Worklog
+
+The BSPC uses a *Work Log* for each project that they work on. This is a file that lives in the top directory for a project (i.e. `rnaseq` in our case), and has the following attributes: 
+
+* Use ReStructured Text format (`.rst` files), because this allows for more flexible documentation and parsing down the line
+* Start each entry with a date, in YYYY-MM-DD format, underlined with hyphens
+* Then a blank line
+* Then your username prefixed with an @
+* Then arbitrary text describing what you did that day.
+* Keeps everything in chronological order, so the latest entry is at the bottom
+
+For example, the top of my Work Log for the `rnaseq` project looks like: 
+
+EXAMPLE 
+
+The audience is you (or another BSPC member) 2 years from now when everyone has forgotten about the project and now needs to start working on it again.
+
+As you are writing, it will feel like you are writing too much or adding way too much detail. You are not. **The future you will thank you.** 
+
+Feel free to keep an informal, conversational tone. This is not a public document. *But do get in the habit of adding a note each time you work on a project!*
+
  
 #### README files
 
