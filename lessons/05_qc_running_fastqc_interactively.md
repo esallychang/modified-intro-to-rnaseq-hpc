@@ -75,7 +75,7 @@ FastQC does the following: \* accepts FASTQ files (or BAM files) as input \* gen
 
 ------------------------------------------------------------------------
 
-> NOTE: Before we run FastQC, **you should be on a compute node** in an interactive session. Please run the following `srun` command if you are not on a compute node. The default `sinteractive` allocation is 1 core (2 CPUs) and 768 MB/CPU (1.5 GB) of memory, which should be just fine for our purposes. See this [Biowulf page](https://hpc.nih.gov/docs/userguide.html#int) for more information.
+> NOTE: Before we run FastQC, **you should be on a compute node** in an interactive session. Please run the following `srun` command if you are not on a compute node. We will start with the default `sinteractive` allocation which is 1 core (2 CPUs) and 768 MB/CPU (1.5 GB) of memory, which should be just fine for our purposes. See this [Biowulf page](https://hpc.nih.gov/docs/userguide.html#int) for more information.
 >
 > ``` bash
 > $ #srun --pty -p interactive -t 0-3:00 --mem 1G --reservation=HBC1 /bin/bash
@@ -86,13 +86,7 @@ FastQC does the following: \* accepts FASTQ files (or BAM files) as input \* gen
 
 ### Run FastQC
 
-Change directories to `raw_data`.
-
-``` bash
-$ cd raw_data/
-```
-
-Before we start using software, we have to load the module for each tool. On O2, this is done using an **LMOD** system.
+Before we start using software, we have to load the module for each tool. On Biowulf, this is done using an **LMOD** system.
 
 If we check which modules we currently have loaded, we should not see FastQC.
 
@@ -129,7 +123,7 @@ $ echo $PATH
 Now, let's create a directory to store the output of FastQC:
 
 ``` bash
-$ mkdir ~/rnaseq/results/fastqc
+$ mkdir results/fastqc
 ```
 
 We will need to specify this directory in the command to run FastQC. How do we know which argument to use?
@@ -143,25 +137,28 @@ $ fastqc --help
 FastQC will accept multiple file names as input, so we can use the `*.fq` wildcard.
 
 ``` bash
+$ cd raw_data
 $ fastqc -o ~/rnaseq/results/fastqc/ *.fq
+# perl: warning: Falling back to a fallback locale ("C.UTF-8"). I think this is fine?
 ```
 
-*Did you notice how each file was processed serially? How do we speed this up?*
+*Did you notice how each file was processed pretty much serially? How do we speed this up?*
 
-FastQC has the capability of splitting up a single process to run on multiple cores! To do this, we will need to specify an additional argument `-t` indicating number of cores. We will also need to exit the current interactive session, since we started this interactive session with only 1 core. We cannot have a tool to use more cores than requested on a compute node.
+FastQC has the capability of splitting up a single process to run on multiple cores! To do this, we will need to specify an additional argument `-t` indicating number of cores. We will also need to exit the current interactive session, since we started this interactive session with only the default 2 cores (CPUs). We cannot have a tool to use more cores than requested on a compute node.
 
 Exit the interactive session and start a new one with 6 cores:
 
 ``` bash
 $ exit  #exit the current interactive session (you will be back on a login node)
-
-$ srun --pty -c 6 -p interactive -t 0-3:00 --mem 2G --reservation=HBC1 /bin/bash  #start a new one with 6 cores (-c 6) and 2GB RAM (--mem 2G)
+$ sinteractive --cpus-per-task 6 --mem=2G
+$ #srun --pty -c 6 -p interactive -t 0-3:00 --mem 2G --reservation=HBC1 /bin/bash  #start a new one with 6 cores (-c 6) and 2GB RAM (--mem 2G)
+$ # Could also be a good opportunity to use tmux to keep our interactive session alive
 ```
 
 Once you are on the compute node, check what job(s) you have running and what resources you are using.
 
 ``` bash
-$ O2squeue
+$ squeue -u $USER
 ```
 
 Now that we are in a new interactive session with the appropriate resources, we will need to load the module again for this new session.
@@ -173,7 +170,7 @@ $ module load fastqc/0.12.1  #reload the module for the new (6-core) interactive
 We will also move into the `raw_data` directory (remember we are on a new compute node now):
 
 ``` bash
-$ cd ~/rnaseq/raw_data
+$ cd raw_data/
 ```
 
 Run FastQC and use the multi-threading functionality of FastQC to run 6 jobs at once (with an additional argument `-t`).
