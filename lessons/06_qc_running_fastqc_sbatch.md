@@ -17,7 +17,7 @@ So far in our FASTQC analysis, we have been directly submitting commands to Biow
 
 **Job submission scripts** for Biowulf are just regular shell scripts, but contain the Slurm **options/directives** for our job submission. These directives define the various resources we are requesting for our job (i.e *number of cores, name of partition, runtime limit* )
 
-Submission of the script using the `sbatch` command allows Slurm to run your job when its your turn. Let's create a job submission script to automate what we have done in [previous lesson](05_qc_running_fastqc_interactively.md).
+Submission of the script using the `sbatch` command allows Slurm to run your job when its your turn. Let's create a job submission script to automate what we have done in [previous lesson](05_qc_running_fastqc_interactively.md) \<- ***MODIFY THIS LINK TO WHATEVER OURS WILL BE.***
 
 Our script will do the following:
 
@@ -25,10 +25,10 @@ Our script will do the following:
 2.  Load the FastQC module
 3.  Run FastQC on all of our FASTQ files
 
-Let's first change the directory to `~/rnaseq/scripts`, and create a script named `mov10_fastqc.run` using `vim`.
+Let's first change the directory to `/rnaseq/scripts`, and create a script named `mov10_fastqc.run` using `vim`.
 
 ``` bash
-$ cd ~/rnaseq/scripts
+$ cd rnaseq/scripts
 
 $ vim mov10_fastqc.run
 ```
@@ -51,10 +51,10 @@ Following the shebang line are the Slurm directives. For the script to run, we n
 Let's specify those options as follows:
 
 ``` bash
-#SBATCH -p short        # partition name
-#SBATCH -t 0-2:00       # time limit
-#SBATCH -c 6        # number of cores
-#SBATCH --mem 6G   # requested memory
+#SBATCH --partition=quick        # Based on running these analyses before, we can get away with running this on a quick (priority!) node
+#SBATCH --time=02:00:00       # time limit
+#SBATCH --cpus-per-task=6        # number of cores
+#SBATCH --mem=6g   # requested memory
 #SBATCH --job-name rnaseq_mov10_fastqc      # Job name
 #SBATCH -o %j.out           # File to which standard output will be written
 #SBATCH -e %j.err       # File to which standard error will be written
@@ -63,14 +63,14 @@ Let's specify those options as follows:
 Now in the body of the script, we can include any commands we want to run. In this case, it will be the following:
 
 ``` bash
-## Change directories to where the fastq files are located
-cd ~/rnaseq/raw_data
+## Change directories to where the fastq files are located. For now I will use absolute paths until we find a good solution for a prefix. 
+cd /data/NICHD-core0/test/changes/rc_training/rnaseq/raw_data
 
 ## Load modules required for script commands
 module load fastqc/0.12.1
 
 ## Run FASTQC
-fastqc -o ~/rnaseq/results/fastqc/ -t 6 *.fq
+fastqc -o /data/NICHD-core0/test/changes/rc_training/rnaseq/fastqc/ -t 6 *.fq
 ```
 
 > **NOTE:** These are the same commands we used when running FASTQC in the interactive session. Since we are writing them in a script, the `tab` completion function will **not work**, so please make sure you don't have any typos when writing the script!
@@ -84,12 +84,12 @@ $ sbatch mov10_fastqc.run
 You should immediately see a prompt saying `Submitted batch job JobID`. Your job is assigned with that unique identifier `JobID`. You can check on the status of your job with:
 
 ``` bash
-$ O2sacct
+$ squeue -u changes
 ```
 
-Look for the row that corresponds to your `JobID`. The third column indicates the state of your job. Possible states include `PENDING`, `RUNNING`, `COMPLETED`. Once your job state is `RUNNING`, you should expect it to finish in less than two minutes. When the state is `COMPLETED`, that means your job is finished.
+Look for the row that corresponds to your `JobID`. The third column indicates the state of your job. Possible states include `PENDING (PD)`, `RUNNING (R)`, `COMPLETING (CG)`. For this example, once your job is `RUNNING`, you should expect it to finish in less than two minutes (although of course this will not always be the case for longer analyses).
 
-> **NOTE:** Other helpful options for checking/managing jobs are available as a [cheatsheet](https://wiki.rc.hms.harvard.edu/display/O2/O2+Command+CheatSheet) from HMS-RC.
+> **NOTE:** Here is a [table of Job State Codes](https://hpc.nih.gov/docs/userguide.html#states) from the Biowulf User Guide.
 
 Check out the output files in your directory:
 
