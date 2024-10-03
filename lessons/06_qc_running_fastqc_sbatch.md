@@ -39,14 +39,14 @@ Once in the vim editor, click `i` to enter INSERT mode. The first thing we need 
 #!/bin/bash
 ```
 
-Following the shebang line are the Slurm directives. For the script to run, we need to include options for **queue/partition (-p) and runtime limit (-t)**. To specify our options, we precede the option with `#SBATCH`. Some key resources to specify are:
+Following the shebang line are the Slurm directives. For the script to run, we need to include options for **queue/partition (--partition) and runtime limit (--time)**. To specify our options, we precede the option with `#SBATCH`. Some key resources to specify are:
 
-| Resource  | Flag  |                                                        Description                                                         |
+| Resource  |      Flag      |                                                        Description                                                         |
 |:----------------------:|:----------------------:|:----------------------:|
-| partition |  -p   |                                                       partition name                                                       |
-|   time    |  -t   |                                hours:minutes run limit, after which the job will be killed                                 |
-|   core    |  -c   | number of cores requested -- this needs to be greater than or equal to the number of cores you plan to use to run your job |
-|  memory   | --mem |                                         memory limit per compute node for the job                                          |
+| partition |  --partition   |                                                       partition name                                                       |
+|   time    |     --time     |                                hours:minutes run limit, after which the job will be killed                                 |
+|   core    | -cpus-per-task | number of cores requested -- this needs to be greater than or equal to the number of cores you plan to use to run your job |
+|  memory   |     --mem      |                                         memory limit per compute node for the job                                          |
 
 Let's specify those options as follows:
 
