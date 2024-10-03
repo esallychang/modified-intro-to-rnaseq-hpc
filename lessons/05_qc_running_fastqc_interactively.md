@@ -75,10 +75,11 @@ FastQC does the following: \* accepts FASTQ files (or BAM files) as input \* gen
 
 ------------------------------------------------------------------------
 
-> NOTE: Before we run FastQC, **you should be on a compute node** in an interactive session. Please run the following `srun` command if you are not on a compute node.
+> NOTE: Before we run FastQC, **you should be on a compute node** in an interactive session. Please run the following `srun` command if you are not on a compute node. The default `sinteractive` allocation is 1 core (2 CPUs) and 768 MB/CPU (1.5 GB) of memory, which should be just fine for our purposes. See this [Biowulf page](https://hpc.nih.gov/docs/userguide.html#int) for more information.
 >
 > ``` bash
-> $ srun --pty -p interactive -t 0-3:00 --mem 1G --reservation=HBC1 /bin/bash
+> $ #srun --pty -p interactive -t 0-3:00 --mem 1G --reservation=HBC1 /bin/bash
+> $ sinteractive 
 > ```
 >
 > ***An interactive session is very useful to test tools and workflows.***
@@ -88,7 +89,7 @@ FastQC does the following: \* accepts FASTQ files (or BAM files) as input \* gen
 Change directories to `raw_data`.
 
 ``` bash
-$ cd ~/rnaseq/raw_data
+$ cd raw_data/
 ```
 
 Before we start using software, we have to load the module for each tool. On O2, this is done using an **LMOD** system.
