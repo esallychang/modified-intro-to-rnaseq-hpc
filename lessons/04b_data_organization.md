@@ -186,24 +186,23 @@ scripts:
 **Exercise**
 
 1.  Take a moment to create a README for the `rnaseq/` folder (hint: use `vim` to create the file). Give a short description of the project and brief descriptions of the types of files you will be storing within each of the sub-directories.
+2.  Use the same strategy to create a `WORKLOG.rst file` and add your first entry about what you just accomplished.
 
 ------------------------------------------------------------------------
 
 ### Obtaining data
 
 Let's populate the `rnaseq/` project with some data.
-The FASTQ files are located on the O2 cluster in the `/n/groups` space.
-Copy them over from the path shown below, into your `raw_data` directory:
+Since we are taking this data from an external example, originally hosted at Harvard HPC, so a simple copy command (`cp`) will not suffice.
+To copy it over we are now going to use the `wget` command and a direct link to a zipped file, then unzip this file to get the raw sequencing files from amongst other files included in their lesson.
 
 ``` bash
-$ cp /n/groups/hbctraining/unix_lesson/raw_fastq/*.fq ~/rnaseq/raw_data/
+$ # This is kind of annoying and unrealistic so let's put this somewhere on Biowulf or something else more realistic!
+$ # Start this in your rnaseq directory.
+$ wget https://www.dropbox.com/s/x66jksdd4jklpdw/unix_lesson.zip
+$ unzip unix_lesson.zip
+$ cp unix_lesson/raw_fastq/*.fq 
 ```
-
-> **NOTE**: When obtaining data from your sequencing facility, the data will not be stored on O2 and so a simple copy command (`cp`) will not suffice.
-> The raw sequence data will likely be located on another remote computer/server that is hosted by the sequencing facility and you will be given login credentials to access it.
-> To copy it over you can use commands like `rsync`, `wget` or `scp`.
-> These are all commands that can help securely copy the data over to the appropriate location on O2.
-> We have some information [linked here](more_bash_cluster.md#copying-files-to-and-from-the-cluster-) if you would like to learn more.
 
 Now the structure of `rnaseq/` should look like this:
 
