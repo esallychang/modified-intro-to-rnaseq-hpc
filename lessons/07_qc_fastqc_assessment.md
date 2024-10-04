@@ -56,7 +56,7 @@ The first module gives the basic statistics for the sample. Generally it is a go
 
 One of the most important analysis modules is the **"Per base sequence quality"** plot. This plot provides the distribution of quality scores at each position in the read across all reads. The y-axis gives the quality scores, while the x-axis represents the position in the read. The color coding of the plot denotes what are considered high, medium and low quality scores.
 
-This plot can alert us to whether there were any problems occuring during sequencing and whether we might need to contact the sequencing facility.
+This plot can alert us to whether there were any problems occurring during sequencing and whether we might need to contact the sequencing facility.
 
 <p align="center">
 
