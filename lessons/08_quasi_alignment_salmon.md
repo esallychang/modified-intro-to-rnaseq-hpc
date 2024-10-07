@@ -158,28 +158,27 @@ The quasi-mapping approach estimates where the reads best map to on the transcri
 Now we know a little bit about how it works, let's map our data using Salmon. We can begin by opening up an interactive session and creating a new directory in our `results` folder for the Salmon output:
 
 ``` bash
-$ srun --pty -p interactive -t 0-3:00 --mem 8G --reservation=HBC2 /bin/bash
-
+#$ srun --pty -p interactive -t 0-3:00 --mem 8G --reservation=HBC2 /bin/bash
+$ sinteractive --cpus-per-task=8 --mem=8G
 $ mkdir ~/rnaseq/results/salmon
-
 $ cd ~/rnaseq/results/salmon
 ```
 
-Salmon is available as a module on O2. To find out more on how to use this module we can use `module spider`:
+Salmon is available as a module on Biowulf. To find out more on how to use this module we can use `module spider`:
 
 ``` bash
-$ module spider salmon/1.8.0
+$ module spider salmon #note that we are using a different version (1.10 vs. 1.8)
 ```
 
 We see that there are no dependency modules and we can simply just load Salmon and get started.
 
 ``` bash
-$ module load salmon/1.8.0
+$ module load salmon
 ```
 
 To perform the quasi-mapping and transcript abundance quantification, we will use the `salmon quant` command. The parameters for the command are described below (more information on parameters can be found [here](http://salmon.readthedocs.io/en/latest/salmon.html#id5)):
 
--   `-i`: specify the location of the index directory; for us it is `/n/groups/hbctraining/rna-seq_2019_02/reference_data/salmon_index`
+-   `-i`: specify the location of the index directory; ***RIGHT NOW IT IS*** `/data/changes/rc_training/rnaseq/references/salmon_index`
 -   `-l A`: Format string describing the library. `A` will automatically infer the most likely library type (more info available [here](http://salmon.readthedocs.io/en/latest/salmon.html#what-s-this-libtype))
 -   `-r`: sample file
 -   `-o`: output quantification file name
@@ -190,9 +189,9 @@ To perform the quasi-mapping and transcript abundance quantification, we will us
 To run the quantification step on a single sample we have the command provided below. Let's try running it on the `Mov10_oe_1.subset.fq` sample:
 
 ``` bash
-$ salmon quant -i /n/groups/hbctraining/rna-seq_2019_02/reference_data/salmon_index \
+$ salmon quant -i /data/changes/rc_training/rnaseq/references/salmon_index \
         -l A \
-    -r ~/rnaseq/raw_data/Mov10_oe_1.subset.fq \
+    -r /data/NICHD-core0/test/changes/rc_training/rnaseq/raw_data/Mov10_oe_1.subset.fq \
     -o Mov10_oe_1.subset.salmon \
     --useVBOpt \
     --seqBias \
@@ -221,7 +220,7 @@ $ ls -l Mov10_oe_1.subset.salmon/
 There is a logs directory, which contains all of the text that was printed to screen as Salmon was running. Additionally, there is a file called **`quant.sf`**. This is the **quantification file** in which each row corresponds to a transcript, listed by Ensembl ID. The columns correspond to metrics for each transcript:
 
 ``` bash
-Name    Length  EffectiveLength TPM     NumReads
+Name    Length  EffectiveLength TPM     NumReads #results at a glance look the same 
 ENST00000632684.1       12      2.000   0.000000        0.000
 ENST00000434970.2       9       1.000   0.000000        0.000
 ENST00000448914.1       13      2.000   0.000000        0.000
