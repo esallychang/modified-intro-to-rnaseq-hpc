@@ -36,9 +36,9 @@ Begin the script starting with the **shebang line**.
 
 1.  Add the Slurm directives ( i.e `#SBATCH`) to request specific resources for our job. The resources we need are listed below.
 
-> **NOTE:** Helpful resources include: \* This [linked lesson](03_working_on_HPC.md#requesting-resources-from-slurm) \* [HMS-RC's O2 Wiki](https://wiki.rc.hms.harvard.edu/display/O2/Using+Slurm+Basic)
+> **NOTE:** Helpful resources include: \* This [linked lesson](03_working_on_HPC.md#requesting-resources-from-slurm) \* [Biowulf SBATCH Cheat Sheet](https://hpc.nih.gov/docs/biowulf-cheat-sheet.pdf) and this [Biowulf help page](https://hpc.nih.gov/docs/userguide.html#submit)
 
--   Your job will use the `short` partition
+-   Your job will use the default (`norm`) partition, NOT the short partition
 -   Request 6 cores to take advantage of Salmon's multi-threading capabilities
 -   Request 12 hours of runtime
 -   Request 8G of memory
@@ -71,7 +71,7 @@ do
 samplename=`basename $fq .fq`
 
 # run salmon
-salmon quant -i /n/groups/hbctraining/rna-seq_2019_02/reference_data/salmon_index \
+salmon quant -i /data/changes/rc_training/rnaseq/references/salmon_index \
  -l A \
  -r $fq \
  -o ${samplename}_salmon \
