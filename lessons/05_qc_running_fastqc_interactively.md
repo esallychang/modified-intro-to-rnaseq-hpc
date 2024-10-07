@@ -25,7 +25,7 @@ The first step in the RNA-Seq workflow is to take the FASTQ files received from 
 The [FASTQ](https://en.wikipedia.org/wiki/FASTQ_format) file format is the defacto file format for sequence reads generated from next-generation sequencing technologies. This file format evolved from FASTA in that it contains sequence data, but also contains quality information. Similar to FASTA, the FASTQ file begins with a header line. The difference is that the FASTQ header is denoted by a `@` character. For a single record (sequence read), there are four lines, each of which are described below:
 
 | Line | Description                                                                                               |
-|--------------------|----------------------------------------------------|
+|------|-----------------------------------------------------------------------------------------------------------|
 | 1    | Always begins with '\@', followed by information about the read                                           |
 | 2    | The actual DNA sequence                                                                                   |
 | 3    | Always begins with a '+', and sometimes the same info as in line 1                                        |
@@ -42,7 +42,7 @@ CACTTGTAAGGGCAGGCCCCCTTCACCCTCCCGCTCCTGGGGGANNNNNNNNNNANNNCGAGGCCCTGGGGTAGAGGGNN
 
 The line 4 has characters encoding the quality of each nucleotide in the read. The legend below provides the mapping of quality scores (Phred-33) to the quality encoding characters. *Different quality encoding scales exist (differing by offset in the ASCII table), but note the most commonly used one is fastqsanger, which is the scale output by Illumina since mid-2011.*
 
-`Quality encoding: !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHI``|         |         |         |         |`
+``` Quality encoding: !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHI``|         |         |         |         | ```
 
 `Quality score:    0........10........20........30........40`
 
@@ -57,7 +57,7 @@ Q = -10 x log10(P), where P is the probability that a base call is erroneous
 These probabaility values are the results from the base calling algorithm and dependent on how much signal was captured for the base incorporation. The score values can be interpreted as follows:
 
 | Phred Quality Score | Probability of incorrect base call | Base call accuracy |
-|:------------------:|:-------------------------------:|:-----------------:|
+|:-------------------:|:----------------------------------:|:------------------:|
 |         10          |              1 in 10               |        90%         |
 |         20          |              1 in 100              |        99%         |
 |         30          |             1 in 1000              |       99.9%        |
