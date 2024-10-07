@@ -77,6 +77,8 @@ Similar to Salmon, aligning reads using STAR is **a two step process**:
 1.  Create a genome index
 2.  Map reads to the genome
 
+> ***UPDATE BASED ON SHARED LOCATION FOR BSPC AND/OR BIOWULF***
+>
 > A quick note on shared databases for human and other commonly used model organisms. The O2 cluster has a designated directory at `/n/groups/shared_databases/` in which there are files that can be accessed by any user. These files contain, but are not limited to, genome indices for various tools, reference sequences, tool specific data, and data from public databases, such as NCBI and PDB. So when using a tool that requires a reference of sorts, it is worth taking a quick look here because chances are it's already been taken care of for you.
 >
 > ``` bash
@@ -85,7 +87,7 @@ Similar to Salmon, aligning reads using STAR is **a two step process**:
 
 #### Creating a genome index
 
-For this workshop we have generated the genome indices for you, so that we don't get held up waiting on the generation of the indices (it takes a while and requires a lot of memory). The index can be found in the `/n/groups/hbctraining/intro_rnaseq_hpc/reference_data_ensembl38/ensembl38_STAR_index/` directory.
+For this workshop we have generated the genome indices for you, so that we don't get held up waiting on the generation of the indices (it takes a while and requires a lot of memory). The index can be found in `/data/NICHD-core0/references/human/gencode-v28/genome/star/human_gencode-v28`
 
 The command to create an index can be found in the job submission script we have linked [here](../scripts/star_genome_index.run).
 
