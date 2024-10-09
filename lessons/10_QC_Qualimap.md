@@ -69,7 +69,7 @@ rnaseq
 To use the STAR aligner, load the module:
 
 ``` bash
-$ module load gcc/6.2.0 star/2.5.4a
+$ module load star/2.7.6a #needed newer version of STAR than what was listed in tutorial originally
 ```
 
 Similar to Salmon, aligning reads using STAR is **a two step process**:
@@ -89,7 +89,7 @@ Similar to Salmon, aligning reads using STAR is **a two step process**:
 
 For this workshop we have generated the genome indices for you, so that we don't get held up waiting on the generation of the indices (it takes a while and requires a lot of memory). The index can be found in `/data/NICHD-core0/references/human/gencode-v28/genome/star/human_gencode-v28`
 
-The command to create an index can be found in the job submission script we have linked [here](../scripts/star_genome_index.run).
+The command to create an index can be found in the job submission script we have linked [here](../scripts/star_genome_index.run)
 
 > **NOTE:** By default the latest human genome build, GRCh38, contains information about alternative alleles for various locations on the genome. If using this version of the GRCh38 genome then it is advisable to use the HISAT2 aligner as it is able to utilize this information during the alignment. There is a version of GRCh38 available that does not have these alleles represented, which is the appropriate version to use with STAR. This is because STAR does not have the functionality to appropriately deal with the presence of alternate alleles as yet.
 
@@ -132,6 +132,29 @@ $ STAR --genomeDir /data/NICHD-core0/references/human/gencode-v28/genome/star/hu
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
 --outSAMattributes Standard 
+```
+
+Since this will take longer with a full-size human reference genome, let's submit an SBATCH script:
+
+``` bash
+#!/bin/bash
+
+#SBATCH --partition=quick
+#SBATCH --time=03:00:00       # time limit
+#SBATCH --cpus-per-task=6        # number of cores
+#SBATCH --mem=32g   # requested memory
+#SBATCH --job-name salmon_in_serial      # Job name
+#SBATCH -o %j.out           # File to which standard output will be written
+#SBATCH -e %j.err       # File to which standard error will be written
+#SBATCH --mail-type=BEGIN,END
+
+# Load Salmon module
+module load star/2.7.6a
+
+# Change directory to where the data is
+cd /data/NICHD-core0/test/changes/rc_training/rnaseq/raw_data
+
+STAR --genomeDir /data/NICHD-core0/references/human/gencode-v28/genome/star/human_gencode-v28 --runThreadN 6 --readFilesIn Mov10_oe_1.subset.fq --outFileNamePrefix ../results/STAR/Mov10_oe_1_ --outSAMtype BAM SortedByCoordinate --outSAMunmapped Within --outSAMattributes Standard 
 ```
 
 #### STAR output
