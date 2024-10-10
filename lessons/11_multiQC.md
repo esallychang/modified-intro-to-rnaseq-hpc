@@ -50,7 +50,7 @@ Next, load the three modules needed to run MultiQC: `gcc`, `python`, `multiqc`.
 ``` bash
 $ cd results/multiqc_report
 
-$ module load gcc/9.2.0 python/2.7.12 multiqc/1.21
+$ module load multiqc #loads v1.22 right now 
 ```
 
 ------------------------------------------------------------------------
@@ -69,6 +69,8 @@ We are going to run MultiQC on the following 4 outputs from our workflow:
 -   `.salmon` directories from salmon
 
 To create a more meaningful report to look at we thought it best to run MultiQC on the full dataset instead of the subset we have been working with so far. We have run each of the tools mentioned above on the full dataset and stored the result in the directory `/n/groups/hbctraining/rna-seq_2019_02/snapshots/full_dataset_results`. We will point to these files as input for our MultiQC analysis.
+
+***I will run pipeline on full samples soon so that we have equivalent files.***
 
 To run MultiQC, we can provide it two inputs at a minimum:
 
