@@ -234,27 +234,25 @@ However, you don't need to do that. We generated this report on a subset of data
 
 #### **Read alignment summary**
 
-The first few numbers listed in the report are the mapping statistics. Qualimap also computes counts by assigning reads to genes and [reports associated statistics](http://qualimap.conesalab.org/doc_html/analysis.html#id7). For example it computes the following: \* the number of reads aligned to genes \* number of ambiguous alignments (reads matching several genes) \* number of alignments without any feature (intronic and intergenic)
+The first few numbers listed in the report are the mapping statistics. Qualimap also computes counts by assigning reads to genes and [reports associated statistics](http://qualimap.conesalab.org/doc_html/analysis.html#id7). For example it computes the following:
 
-<p align="center">
+-   the number of reads aligned to genes
+
+-   number of ambiguous alignments (reads matching several genes)
+
+-   number of alignments without any feature (intronic and intergenic)
 
 <img src="../img/qualimap_read_alignment.png" width="700"/>
 
-</p>
-
-> -   The percentage of mapped reads is a global indicator of the overall sequencing accuracy. We expect between 70-90% of reads to be mapped for the human genome.\
+> -   The percentage of mapped reads is a global indicator of the overall sequencing accuracy. We expect between 70-90% of reads to be mapped for the human genome.
 > -   Expect a small fraction of reads to be mapping equally well to multiple regions in the genome (‘multi-mapping reads’).
 > -   The count related metrics are not as relevant to us since we have quantified with Salmon at the transcript level.
 
-#### **Reads genomic origin**
+#### **Genomic Origin of Reads: Exon, Intron or Intergenic Region?**
 
 This section reports how many alignments fall into exonic, intronic and intergenic regions along with a number of intronic/intergenic alignments overlapping exons. Exonic region includes 5’UTR,protein coding region and 3’UTR region. This information is summarized in table in addition to a pie chart as shown below.
 
-<p align="center">
-
 <img src="../img/qualimap_genomic_feature.png" width="700"/>
-
-</p>
 
 > -   Even if you have high genomic mapping rate for all samples, check to see where the reads are mapping. Expect a high proportion of reads mapping to exonic regions (\> 60%) and lower intronic mapping rates (20 -30%).
 > -   A higher intronic mapping rate is expected for rRNA removal compared to polyA selection. The intronic reads likely originate from immature transcripts which include either full-length pre-mRNA molecules or nascent transcripts where the RNA polymerase has not yet attached to the 3′ end of the gene.
