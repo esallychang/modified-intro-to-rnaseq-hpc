@@ -200,7 +200,7 @@ $ unset DISPLAY
 We also need to load the qualimap module:
 
 ``` bash
-$ module load java/jdk-1.8u112 qualimap/2.2.1
+$ module load qualimap/2.2.1
 ```
 
 Now we are ready to run Qualimap on our BAM file! There are different tools or modules available through Qualimap, and the [documentation website](http://qualimap.bioinfo.cipf.es/doc_html/command_line.html) details the tools and options available. We are interested in the `rnaseq` tool. To see the arguments available for this tool we can search the help:
@@ -219,18 +219,18 @@ We will be running Qualimap with the following specifications:
 -   `--java-mem-size=`: set Java memory
 
 ``` bash
-$ qualimap rnaseq \
--outdir results/qualimap/Mov10_oe_1 \
--a proportional \
--bam results/STAR/Mov10_oe_1_Aligned.sortedByCoord.out.bam \
--p strand-specific-reverse \
--gtf /n/groups/hbctraining/intro_rnaseq_hpc/reference_data_ensembl38/Homo_sapiens.GRCh38.92.1.gtf \
---java-mem-size=8G
+# assuming you are running the script from /results
+qualimap rnaseq -outdir results/qualimap/Mov10_oe_1 -a proportional /
+-bam STAR/Mov10_oe_1_Aligned.sortedByCoord.out.bam /
+-p strand-specific-reverse /
+-gtf /data/NICHD-core0/references/human/gencode-v28/annotation/human_gencode-v28.gtf --java-mem-size=8G
 ```
 
 ### The Qualimap report
 
-The Qualimap report in HTML folrmat should be present in the `results/qualimap` directory. To view this report you need a web browser, so you would need to transfer it over to your laptop. However, you don't need to do that. We generated this report on a subset of data, to get a better idea of the metrics let's **take a look at the report of the full dataset for `Mov_oe_1`**, available [in this zipped folder](https://www.dropbox.com/scl/fi/t3t41hjubytbce6d9g29h/Mov10_oe_1_fulldata_qualimap.zip?rlkey=aum3nw3jym3t4f3l31p6564jn&dl=1). Please download and unzip the folder; find the HTML report within and open it in your browser.
+The Qualimap report in HTML format should be present in the `results/qualimap` directory. To view this report you need a web browser, so you would need to transfer it over to your laptop. You can do so by Connecting to Server again.
+
+However, you don't need to do that. We generated this report on a subset of data, to get a better idea of the metrics let's **take a look at the report of the full dataset for `Mov_oe_1`**, available [in this zipped folder](https://www.dropbox.com/scl/fi/t3t41hjubytbce6d9g29h/Mov10_oe_1_fulldata_qualimap.zip?rlkey=aum3nw3jym3t4f3l31p6564jn&dl=1). Please download and unzip the folder; find the HTML report within and open it in your browser.
 
 #### **Read alignment summary**
 
