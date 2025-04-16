@@ -8,7 +8,7 @@ on:
     - main
     - site-v*
     - modified-intro-*202*
-    -modified-intro-march2025
+    - modified-intro-march2025
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
