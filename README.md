@@ -1,4 +1,4 @@
-# Introduction to RNA-seq using high-performance computing (HPC)
+# This is a test page for github pages deployment
 
 | Audience | Computational skills required | Duration |
 :----------|:----------|:----------|
