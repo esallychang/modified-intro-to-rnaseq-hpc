@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>GitHub Pages Test | Introduction to bulk RNA-seq</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="GitHub Pages Test" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction to bulk RNA-seq" />
+<meta property="og:description" content="Introduction to bulk RNA-seq" />
+<link rel="canonical" href="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/STAR%20Alignment%20Strategy.html" />
+<meta property="og:url" content="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/STAR%20Alignment%20Strategy.html" />
+<meta property="og:site_name" content="GitHub Pages Test" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="GitHub Pages Test" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Introduction to bulk RNA-seq","headline":"GitHub Pages Test","url":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/STAR%20Alignment%20Strategy.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/assets/css/style.css?v=9703ee20adaec070ce16963fcf086d651839e2a2">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">GitHub Pages Test</h1>
+      <h2 class="project-tagline">Introduction to bulk RNA-seq</h2>
+      
+        <a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <p>title: “STAR alignment strategy”
+author: “Meeta Mistry, Mary Piper”
+date: Monday September 10, 2018
+—</p>
+
+<p>Approximate time: 20 minutes</p>
+
+<h3 id="star-alignment-strategy">STAR Alignment Strategy</h3>
+
+<p>STAR is shown to have high accuracy and outperforms other aligners by more than a factor of 50 in mapping speed, but it is memory intensive. The algorithm achieves this highly efficient mapping by performing a two-step process:</p>
+
+<ol>
+  <li>Seed searching</li>
+  <li>Clustering, stitching, and scoring</li>
+</ol>
+
+<h4 id="seed-searching">Seed searching</h4>
+
+<p>For every read that STAR aligns, STAR will search for the longest sequence that exactly matches one or more locations on the reference genome. These longest matching sequences are called the Maximal Mappable Prefixes (MMPs):</p>
+
+<p><img src="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/img/alignment_STAR_step1.png" alt="STAR_step1" /></p>
+
+<p>The different parts of the read that are mapped separately are called ‘seeds’. So the first MMP that is mapped to the genome is called <em>seed1</em>.</p>
+
+<p>STAR will then search again for only the unmapped portion of the read to find the next longest sequence that exactly matches the reference genome, or the next MMP, which will be <em>seed2</em>.</p>
+
+<p><img src="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/img/alignment_STAR_step2.png" alt="STAR_step2" /></p>
+
+<p>This sequential searching of only the unmapped portions of reads underlies the efficiency of the STAR algorithm. STAR uses an uncompressed suffix array (SA) to efficiently search for the MMPs, this allows for quick searching against even the largest reference genomes. Other slower aligners use algorithms that often search for the entire read sequence before splitting reads and performing iterative rounds of mapping.</p>
+
+<p><strong>If STAR does not find an exact matching sequence</strong> for each part of the read due to mismatches or indels, the previous MMPs will be extended.</p>
+
+<p><img src="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/img/alignment_STAR_step3.png" alt="STAR_step3" /></p>
+
+<p><strong>If extension does not give a good alignment</strong>, then the poor quality or adapter sequence (or other contaminating sequence) will be soft clipped.</p>
+
+<p><img src="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/img/alignment_STAR_step4.png" alt="STAR_step4" /></p>
+
+<h4 id="clustering-stitching-and-scoring">Clustering, stitching, and scoring</h4>
+
+<p>The separate seeds are stitched together to create a complete read by first clustering the seeds together based on proximity to a set of ‘anchor’ seeds, or seeds that are not multi-mapping.</p>
+
+<p>Then the seeds are stitched together based on the best alignment for the read (scoring based on mismatches, indels, gaps, etc.).</p>
+
+<p><img src="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/img/alignment_STAR_step5.png" alt="STAR_step5" /></p>
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc">modified-intro-to-rnaseq-hpc</a> is maintained by <a href="https://github.com/esallychang">esallychang</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>

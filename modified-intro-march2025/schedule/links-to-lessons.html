@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Bulk RNA-seq Data Analysis using High-Performance Computing (bulk RNA-seq Part I – FASTQ to counts) | GitHub Pages Test</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Bulk RNA-seq Data Analysis using High-Performance Computing (bulk RNA-seq Part I – FASTQ to counts)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction to bulk RNA-seq" />
+<meta property="og:description" content="Introduction to bulk RNA-seq" />
+<link rel="canonical" href="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/schedule/links-to-lessons.html" />
+<meta property="og:url" content="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/schedule/links-to-lessons.html" />
+<meta property="og:site_name" content="GitHub Pages Test" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Bulk RNA-seq Data Analysis using High-Performance Computing (bulk RNA-seq Part I – FASTQ to counts)" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Introduction to bulk RNA-seq","headline":"Bulk RNA-seq Data Analysis using High-Performance Computing (bulk RNA-seq Part I – FASTQ to counts)","url":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/schedule/links-to-lessons.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/assets/css/style.css?v=9703ee20adaec070ce16963fcf086d651839e2a2">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Bulk RNA-seq Data Analysis using High-Performance Computing (bulk RNA-seq Part I – FASTQ to counts)</h1>
+      <h2 class="project-tagline">Introduction to bulk RNA-seq</h2>
+      
+        <a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h1 id="bulk-rna-seq-data-analysis-using-high-performance-computing-bulk-rna-seq-part-i--fastq-to-counts">Bulk RNA-seq Data Analysis using High-Performance Computing (bulk RNA-seq Part I – FASTQ to counts)</h1>
+
+<h2 id="learning-objectives">Learning Objectives</h2>
+
+<ul>
+  <li>Understand the necessity for, and use of, the command line interface (bash) and HPC for analyzing high-throughput sequencing data.</li>
+  <li>Understand best practices for designing an RNA-seq experiment and analysis the resulting data.</li>
+</ul>
+
+<h2 id="installations">Installations</h2>
+
+<p><strong><em>All:</em></strong></p>
+
+<ul>
+  <li><a href="https://filezilla-project.org/download.php?type=client">FileZilla Client</a> (make sure you get ‘FileZilla Client’)</li>
+</ul>
+
+<p><strong><em>Mac users:</em></strong></p>
+
+<ul>
+  <li>Plain text editor like <a href="http://www.sublimetext.com/">Sublime text</a> or similar</li>
+</ul>
+
+<p><strong><em>Windows users:</em></strong></p>
+
+<ul>
+  <li><a href="https://git-scm.com/download/win">GitBash</a></li>
+  <li>Plain text editor like <a href="http://notepad-plus-plus.org/">Notepad++</a> or similar</li>
+</ul>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>These materials focus on the use of local computational resources at Harvard, which are <strong>only accessible to Harvard affiliates</strong></li>
+  <li>Non-Harvard folks can <a href="https://www.dropbox.com/s/t3lkyz1pz021222/unix_lesson.tar.gz?dl=0">download the data</a> and set up to work on their local clusters (with the help of local system administrators)</li>
+</ul>
+
+<h3 id="instructions-for-harvard-researchers-with-access-to-hms-rcs-o2-cluster">Instructions for Harvard researchers with access to HMS-RC’s O2 cluster</h3>
+
+<p>To run through the code in the lessons below, you will need to be <strong>logged into O2</strong> and <strong>working on a compute node</strong> (i.e. your command prompt should have the word <code class="language-plaintext highlighter-rouge">compute</code> in it).</p>
+
+<ol>
+  <li>Log in using <code class="language-plaintext highlighter-rouge">ssh ecommonsID@o2.hms.harvard.edu</code> and enter your password.</li>
+  <li>Once you are on the login node, use <code class="language-plaintext highlighter-rouge">srun --pty -p interactive -t 0-2:30 --mem 1G /bin/bash</code> to get on a compute node or as specified in the lesson.</li>
+  <li>Proceed only once your command prompt has the word <code class="language-plaintext highlighter-rouge">compute</code> in it.</li>
+  <li>If you log out between lessons (using the <code class="language-plaintext highlighter-rouge">exit</code> command twice), please follow points 1. and 2. above to log back in and get on a compute node when you restart with the self learning.</li>
+</ol>
+
+<h2 id="lessons">Lessons</h2>
+
+<h3 id="part-1">Part 1</h3>
+<ol>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/01_intro-to-RNAseq.html">Introduction to RNA-seq</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/shell_review.html">Shell basics review</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/03_working_on_HPC.html">Working in an HPC environment - Review</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/04a_data_organization.html">Best Practices in Research Data Management (RDM)</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/04b_data_organization.html">Project Organization (using Data Management best practices)</a></li>
+</ol>
+
+<hr />
+
+<h3 id="part-ii">Part II</h3>
+<ol>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/05_qc_running_fastqc_interactively.html">Quality Control of Sequence Data: Running FASTQC</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/02_experimental_planning_considerations.html">Experimental design considerations</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/06_qc_running_fastqc_sbatch.html">Quality Control of Sequence Data: Running FASTQC on multiple samples</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/07_qc_fastqc_assessment.html">Quality Control of Sequence Data: Evaluating FASTQC reports</a></li>
+</ol>
+
+<hr />
+
+<h3 id="part-iii">Part III</h3>
+<ol>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lectures/alignment_quantification.pdf">Sequence Alignment Theory</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/09_quasi_alignment_salmon_sbatch.html">Quantifying expression using alignment-free methods (Salmon on multiple samples)</a></li>
+</ol>
+
+<hr />
+
+<h3 id="part-iv">Part IV</h3>
+
+<ol>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/10_QC_Qualimap.html">QC with Alignment Data</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/11_multiQC.html">Documenting Steps in the Workflow with MultiQC</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lectures/RNA-seq_troubleshooting.pdf">Troubleshooting RNA-seq Data Analysis</a></li>
+</ol>
+
+<hr />
+
+<h3 id="part-v">Part V</h3>
+
+<ol>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/12_automating_workflow.html">Automating the RNA-seq workflow</a></li>
+</ol>
+
+<hr />
+
+<h3 id="answer-keys">Answer Keys</h3>
+
+<ul>
+  <li><a href="https://www.dropbox.com/s/524mevuyba34l5b/exp_design_table.xlsx?dl=1">Experimental design (one possible solution)</a></li>
+  <li><a href="https://www.dropbox.com/s/9wdyhfqpic05l6p/mov10_fastqc.run?dl=1">FASTQC sbatch script</a></li>
+  <li><a href="https://www.dropbox.com/s/l7puf8oahtbwmpk/22914006.out?dl=1">FASTQC sbatch script .out file</a></li>
+  <li><a href="https://www.dropbox.com/s/8a1g6o9t2kxit30/22914006.err?dl=1">FASTQC sbatch script .err file</a>.</li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/answer_key/salmon_all_samples.sbatch">sbatch script to run salmon for all samples</a></li>
+  <li><a href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/scripts/rnaseq_analysis_on_input_file.sh">Automation Script</a></li>
+</ul>
+
+<hr />
+
+<h2 id="building-on-this-workshop">Building on this workshop</h2>
+<ul>
+  <li><a href="https://hbctraining.github.io/Intro-to-R-flipped/schedule/links-to-lessons.html">Introduction to R workshop materials</a></li>
+  <li><a href="https://hbctraining.github.io/DGE_workshop_salmon_online/schedule/links-to-lessons.html">Bulk RNA-seq Part II (differential gene expression analysis) materials</a></li>
+</ul>
+
+<hr />
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=TMLIxwDP7sk">Video about statistics behind salmon quantification</a></li>
+  <li>Advanced bash for working on O2:
+    <ul>
+      <li><a href="https://hbctraining.github.io/In-depth-NGS-Data-Analysis-Course/sessionVI/lessons/more_bash.html#alias">Creating shortcuts or aliases</a></li>
+      <li><a href="https://hbctraining.github.io/In-depth-NGS-Data-Analysis-Course/sessionVI/lessons/more_bash.html#rsync">Copying files from other remote locations to O2</a></li>
+      <li><a href="https://hbctraining.github.io/In-depth-NGS-Data-Analysis-Course/sessionVI/lessons/more_bash.html#symlink">Creating symbolic links</a></li>
+    </ul>
+  </li>
+  <li><a href="https://hbctraining.github.io/Accessing_public_genomic_data/lessons/accessing_genome_reference_data.html">Obtaining reference genomes or transcriptomes</a></li>
+</ul>
+
+<hr />
+<p><em>These materials have been developed by members of the teaching team at the <a href="http://bioinformatics.sph.harvard.edu/">Harvard Chan Bioinformatics Core (HBC)</a>. These are open access materials distributed under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a> (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</em></p>
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc">modified-intro-to-rnaseq-hpc</a> is maintained by <a href="https://github.com/esallychang">esallychang</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>
