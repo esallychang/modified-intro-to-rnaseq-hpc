@@ -4,7 +4,7 @@ author: "Modified by Sally Chang at NICHD"
 date: "Tuesday, September 25, 2024"
 ---
 
-Approximate time: 90 minutes
+Approximate time: 120 minutes
 
 ## Learning Objectives:
 
