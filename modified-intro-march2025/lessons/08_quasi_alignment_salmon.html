@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Quantification of transcript abundance using Salmon | GitHub Pages Test</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Quantification of transcript abundance using Salmon" />
+<meta name="author" content="Mary Piper, Meeta Mistry, Radhika Khetani, Jihe Liu - Edited by Sally Chang @ NICHD" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction to bulk RNA-seq" />
+<meta property="og:description" content="Introduction to bulk RNA-seq" />
+<link rel="canonical" href="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/08_quasi_alignment_salmon.html" />
+<meta property="og:url" content="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/08_quasi_alignment_salmon.html" />
+<meta property="og:site_name" content="GitHub Pages Test" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-10-04T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Quantification of transcript abundance using Salmon" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Mary Piper, Meeta Mistry, Radhika Khetani, Jihe Liu - Edited by Sally Chang @ NICHD"},"dateModified":"2024-10-04T00:00:00+00:00","datePublished":"2024-10-04T00:00:00+00:00","description":"Introduction to bulk RNA-seq","headline":"Quantification of transcript abundance using Salmon","mainEntityOfPage":{"@type":"WebPage","@id":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/08_quasi_alignment_salmon.html"},"url":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/08_quasi_alignment_salmon.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/assets/css/style.css?v=b507c6c38fbc65ecc2e6abea386dbda0aeab8b3b">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Quantification of transcript abundance using Salmon</h1>
+      <h2 class="project-tagline">Introduction to bulk RNA-seq</h2>
+      
+        <a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <p>Approximate time: 1.25 hours</p>
+
+<h2 id="learning-objectives">Learning Objectives</h2>
+
+<ul>
+  <li>Use lightweight algorithms to quantify reads to abundance estimates</li>
+  <li>Explain how Salmon performs quasi-mapping and transcript abundance estimation</li>
+</ul>
+
+<h2 id="lightweight-alignment-and-quantification-of-gene-expression">Lightweight alignment and quantification of gene expression</h2>
+
+<p>Now that we have explored the quality of our raw reads, we can move on to quantifying expression at the transcript level. The goal of this step is to identify from which transcript each of the reads originated from and get an estimate of expression associated with each transcript.</p>
+
+<p align="center">
+
+<img src="../img/rnaseq_salmon_workflow.png" width="400" />
+
+</p>
+
+<p>Tools that have been found to be most accurate for this step in the analysis are referred to as lightweight alignment tools, which include <a href="https://pachterlab.github.io/kallisto/about">Kallisto</a>, <a href="http://www.nature.com/nbt/journal/v32/n5/full/nbt.2862.html">Sailfish</a> and <a href="https://combine-lab.github.io/salmon/">Salmon</a>; each working slightly different from one another. We will focus on Salmon for this workshop, which is the successor of Sailfish. However, Kallisto is an equally good choice with similar performance metrics for speed and accuracy.</p>
+
+<p>Common to all of these tools is that <strong>base-to-base alignment of the reads is avoided</strong>, which is the time-consuming step of older splice-aware alignment tools such as STAR and HISAT2. These lightweight alignment tools <strong>provide quantification estimates much faster than older tools</strong> (typically more than 20 times faster) with <strong>improvements in accuracy</strong> [<a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0734-x">1</a>]. These transcript expression estimates, often referred to as ‘pseudocounts’ or ‘abundance estimates’, can be aggregated to the gene level for use with differential gene expression tools like <a href="http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html">DESeq2</a> or the estimates can be used directly for isoform-level differential expression using a tool like <a href="http://www.biorxiv.org/content/biorxiv/early/2016/06/10/058164.full.pdf">Sleuth</a>.</p>
+
+<h2 id="salmon">Salmon</h2>
+
+<p><a href="http://salmon.readthedocs.io/en/latest/salmon.html#using-salmon">Salmon</a> uses the reference transcriptome (in FASTA format) and raw sequencing reads (in FASTQ format) as input to perform both mapping and quantification of the reads.</p>
+
+<p>The “quasi-mapping” approach utilized by Salmon <strong>requires a transcriptome reference index</strong> to determine the position and orientation information for where the fragments best map prior to quantification [<a href="https://academic.oup.com/bioinformatics/article/32/12/i192/2288985/RapMap-a-rapid-sensitive-and-accurate-tool-for">2</a>]. The reference index essentially provides the transcriptome in a format that is <strong>easily and rapidly searchable</strong>. Therefore, it will allow us to quickly find the positions in the transcriptome where each of the reads originated.</p>
+
+<blockquote>
+  <p><strong>NOTE:</strong> Since we are searching against only the transcripts (transcriptome), Salmon would not be the appropriate tool to use if trying to detect <strong>novel genes or isoforms, intron retention events, or other methods that require a well annotated whole genome instead of only the transcriptome</strong>.</p>
+</blockquote>
+
+<p align="center">
+
+<img src="../img/salmon_workflow_subset.png" width="300" />
+
+</p>
+
+<p><em>Image credit: <a href="https://www.rna-seqblog.com/salmon-fast-and-bias-aware-quantification-of-transcript-expression/">RNA-Seq Blog</a></em></p>
+
+<h3 id="creating-the-transcriptome-index"><strong>Creating the transcriptome index</strong></h3>
+
+<p>This step involves creating an index to evaluate the sequences for all possible unique sequences of length k (k-mer) in the <strong>transcriptome</strong>, which includes all known transcripts (i.e. splice isoforms) for all genes. <strong>The index helps creates a signature for each transcript in our reference transcriptome.</strong></p>
+
+<p>The Salmon index has two components: - a suffix array (SA) of the reference transcriptome - a hash table to map each transcript in the reference transcriptome to it’s location in the SA (is not required, but improves the speed of mapping dramatically)</p>
+
+<p>To create the index, we use the <code class="language-plaintext highlighter-rouge">salmon index</code> command as detailed in the code below. However, <strong>we are not going to run this code in class</strong> as it can take a long time to run and it requires a large amount of memory. Instead, we will have you point to an index that we have generated for you located at <code class="language-plaintext highlighter-rouge">/n/groups/hbctraining/rna-seq_2019_02/reference_data/salmon.ensembl38.idx.09-06-2019</code>.</p>
+
+<p><strong>Let’s first load the most up-to-date version of the software (default on Biowulf):</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module load salmon
+</code></pre></div></div>
+
+<p><strong>Then, let’s download the reference transcriptome in FASTA format:</strong></p>
+
+<p>We will generate the index from transcript sequences obtained from the <a href="https://useast.ensembl.org/info/data/ftp/index.html">Ensembl ftp site</a> with the following commands:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Download from the FTP server</span>
+<span class="nv">$ </span>wget ftp://ftp.ensembl.org/pub/release-95/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz
+
+<span class="c"># Decompress the FASTA file</span>
+<span class="nv">$ </span><span class="nb">gzip</span> <span class="nt">-d</span> Homo_sapiens.GRCh38.cdna.all.fa.gz
+</code></pre></div></div>
+
+<p>Below is the code to run the indexing step, and a description of the parameters:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">## DO NOT RUN THIS CODE</span>
+<span class="nv">$ </span>salmon index <span class="se">\</span>
+<span class="nt">-t</span> /data/changes/rc_training/rnaseq/references/Homo_sapiens.GRCh38.cdna.all.fa <span class="se">\</span>
+<span class="c"># I will create symlink of this for future work</span>
+<span class="nt">-i</span> salmon_index <span class="se">\</span>
+<span class="nt">-k</span> 31
+</code></pre></div></div>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">-t</code>:</strong> the path to the transcriptome file (in FASTA format)</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">-i</code>:</strong> the path to the folder to store the indices generated</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">-k</code>:</strong> the length of kmer to use to create the indices (will output all sequences in transcriptome of length k)</li>
+</ul>
+
+<blockquote>
+  <p><strong>NOTE:</strong> Default kmer size for salmon is -k 31, so we do not need to include the <code class="language-plaintext highlighter-rouge">-k</code> parameter in the index command. However, the kmer default of 31 is optimized for read sizes of 75bp or longer and if your reads are shorter, you will want a smaller kmer (kmer size needs to be an odd number).</p>
+</blockquote>
+
+<p><strong>OR HAVE STUDENTS RUN INDEXING AS A SBATCH SCRIPT:</strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c">#SBATCH --partition=quick       </span>
+<span class="c">#SBATCH --time=03:00:00       # time limit</span>
+<span class="c">#SBATCH --cpus-per-task=6        # number of cores</span>
+<span class="c">#SBATCH --mem=6g   # requested memory</span>
+<span class="c">#SBATCH --job-name salmon_index      # Job name</span>
+<span class="c">#SBATCH -o %j.out           # File to which standard output will be written</span>
+<span class="c">#SBATCH -e %j.err       # File to which standard error will be written</span>
+
+module load salmon
+
+salmon index <span class="se">\</span>
+<span class="nt">-t</span> /data/changes/rc_training/rnaseq/references/Homo_sapiens.GRCh38.cdna.all.fa <span class="se">\</span>
+<span class="nt">-i</span> salmon_index <span class="se">\</span>
+<span class="nt">-k</span> 31
+</code></pre></div></div>
+
+<p><strong>Exercise:</strong></p>
+
+<p>In your RNA-seq experiment, you expressed a GFP transgene in your mice, and you would like to quantify the expression of GFP. We know that the sequence is not present in the mice transcriptome. What would you do?</p>
+
+<ul>
+  <li><strong>a.</strong> Try laboratory techniques like quantitative PCR to act as a proxy for expression level</li>
+  <li><strong>b.</strong> Add the sequence of the GFP transcript to the FASTA reference file</li>
+  <li><strong>c.</strong> Manually search for and count the number of times the GFP transcript is present in the read files for each sample</li>
+  <li><strong>d.</strong> Feel defeated and accept that there is no valid way to do this</li>
+</ul>
+
+<hr />
+
+<h3 id="quasi-mapping-and-quantification"><strong>Quasi-mapping and quantification</strong></h3>
+
+<p>The quasi-mapping approach estimates where the reads best map to on the transcriptome through identifying where informative sequences within the read map instead of performing base-by-base alignment. The quasi-mapping approach is described below, with details provided by the Rapmap tool [<a href="https://academic.oup.com/bioinformatics/article/32/12/i192/2288985/RapMap-a-rapid-sensitive-and-accurate-tool-for">3</a>], which provides the underlying algorithm for the quasi-mapping.</p>
+
+<ul>
+  <li>
+    <p><strong>Step 1: Quasi-mapping</strong></p>
+
+    <p><img src="../img/salmon_quasialignment.png" width="750" /></p>
+
+    <blockquote>
+      <p>RapMap: a rapid, sensitive and accurate tool for mapping RNA-seq reads to transcriptomes. A. Srivastava, H. Sarkar, N. Gupta, R. Patro. Bioinformatics (2016) 32 (12): i192-i200.</p>
+    </blockquote>
+
+    <p>To determine the best mapping for each read/fragment, the quasi-mapping procedure performs the following steps [<a href="https://academic.oup.com/bioinformatics/article/32/12/i192/2288985/RapMap-a-rapid-sensitive-and-accurate-tool-for">2</a>]:</p>
+
+    <ol>
+      <li>
+        <p>The read is scanned from left to right until a k-mer that appears in the hash table is discovered.</p>
+      </li>
+      <li>
+        <p>The k-mer is looked up in the hash table and the SA intervals are retrieved, giving all suffixes containing that k-mer</p>
+      </li>
+      <li>
+        <p>The maximal matching prefix (MMP) is identified by finding the longest read sequence that exactly matches the reference suffixes.</p>
+      </li>
+      <li>
+        <p>We could search for the next MMP at the position following the MMP, but often natural variation or a sequencing error in the read is the cause of the mismatch from the reference, so the beginning the search at this position would likely return the same set of transcripts. Therefore, Salmon identifies the next informative position (NIP), by <strong>skipping ahead 1 k-mer</strong>.</p>
+      </li>
+      <li>
+        <p>This process is repeated until the end of the read.</p>
+      </li>
+      <li>
+        <p>The final mappings are generated by determining the set of transcripts appearing in all MMPs for the read. The transcripts, orientation and transcript location are output for each read.</p>
+
+        <blockquote>
+          <p><strong>NOTE:</strong> If there are k-mers in the reads that are not in the index, they are not counted. As such, trimming is not required when using this method. Accordingly, if there are reads from transcripts not present in the reference transcriptome, they will not be quantified. Quantification of the reads is only as good as the quality of the reference transcriptome.</p>
+        </blockquote>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p><strong>Step 2: Abundance quantification</strong></p>
+
+    <p>After determining the best mapping for each read/fragment using the quasi-mapping method, salmon will generate the final transcript abundance estimates after modeling sample-specific parameters and biases. Note that reads/fragments that map equally well to more than one transcript will have the count divided between all of the mappings; thereby not losing information for the various gene isoforms.</p>
+
+    <p>Instead of only counting the number of reads/fragments mapping to each of the transcripts, Salmon uses multiple complex modeling approaches, like Expectation Maximization (EM) to estimate the transcript abundances while correcting the abundance estimates for any sample-specific biases/factors [<a href="https://www.nature.com/articles/nmeth.4197">4</a>]. Sample-specific bias models are helpful when needing to account for known biases present in RNA-Seq data including:</p>
+
+    <ul>
+      <li>GC bias</li>
+      <li>positional coverage biases</li>
+      <li>sequence biases at 5’ and 3’ ends of the fragments</li>
+      <li>fragment length distribution</li>
+      <li>strand-specific methods</li>
+    </ul>
+
+    <p>If not accounted for, these biases can lead to unacceptable false positive rates in differential expression studies. The <strong>Salmon algorithm can learn these sample-specific biases and account for them in the transcript abundance estimates</strong>. Generally, this step results in more accurate transcript abundance estimation.</p>
+  </li>
+</ul>
+
+<p>Now we know a little bit about how it works, let’s map our data using Salmon. We can begin by opening up an interactive session and creating a new directory in our <code class="language-plaintext highlighter-rouge">results</code> folder for the Salmon output:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#$ srun --pty -p interactive -t 0-3:00 --mem 8G --reservation=HBC2 /bin/bash</span>
+<span class="nv">$ </span>sinteractive <span class="nt">--cpus-per-task</span><span class="o">=</span>8 <span class="nt">--mem</span><span class="o">=</span>8G
+<span class="nv">$ </span><span class="nb">mkdir</span> ~/rnaseq/results/salmon
+<span class="nv">$ </span><span class="nb">cd</span> ~/rnaseq/results/salmon
+</code></pre></div></div>
+
+<p>Salmon is available as a module on Biowulf. To find out more on how to use this module we can use <code class="language-plaintext highlighter-rouge">module spider</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>module spider salmon <span class="c">#note that we are using a different version (1.10 vs. 1.8)</span>
+</code></pre></div></div>
+
+<p>We see that there are no dependency modules and we can simply just load Salmon and get started.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>module load salmon
+</code></pre></div></div>
+
+<p>To perform the quasi-mapping and transcript abundance quantification, we will use the <code class="language-plaintext highlighter-rouge">salmon quant</code> command. The parameters for the command are described below (more information on parameters can be found <a href="http://salmon.readthedocs.io/en/latest/salmon.html#id5">here</a>):</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">-i</code>: specify the location of the index directory; <strong><em>RIGHT NOW IT IS</em></strong> <code class="language-plaintext highlighter-rouge">/data/changes/rc_training/rnaseq/references/salmon_index</code></li>
+  <li><code class="language-plaintext highlighter-rouge">-l A</code>: Format string describing the library. <code class="language-plaintext highlighter-rouge">A</code> will automatically infer the most likely library type (more info available <a href="http://salmon.readthedocs.io/en/latest/salmon.html#what-s-this-libtype">here</a>)</li>
+  <li><code class="language-plaintext highlighter-rouge">-r</code>: sample file</li>
+  <li><code class="language-plaintext highlighter-rouge">-o</code>: output quantification file name</li>
+  <li><code class="language-plaintext highlighter-rouge">--useVBOpt</code>: use variational Bayesian EM algorithm rather than the ‘standard EM’ to optimize abundance estimates (more accurate)</li>
+  <li><code class="language-plaintext highlighter-rouge">--seqBias</code> will enable it to learn and correct for sequence-specific biases in the input data</li>
+  <li><code class="language-plaintext highlighter-rouge">--validateMappings</code>: developed for finding and scoring the potential mapping loci of a read by performing base-by-base alignment of the reads to the potential loci, scoring the loci, and removing loci falling below a threshold score. This option improves the sensitivity and specificity of the mapping.</li>
+</ul>
+
+<p>To run the quantification step on a single sample we have the command provided below. Let’s try running it on the <code class="language-plaintext highlighter-rouge">Mov10_oe_1.subset.fq</code> sample:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>salmon quant <span class="nt">-i</span> /data/changes/rc_training/rnaseq/references/salmon_index <span class="se">\</span>
+        <span class="nt">-l</span> A <span class="se">\</span>
+    <span class="nt">-r</span> /data/NICHD-core0/test/changes/rc_training/rnaseq/raw_data/Mov10_oe_1.subset.fq <span class="se">\</span>
+    <span class="nt">-o</span> Mov10_oe_1.subset.salmon <span class="se">\</span>
+    <span class="nt">--useVBOpt</span> <span class="se">\</span>
+    <span class="nt">--seqBias</span> <span class="se">\</span>
+    <span class="nt">--validateMappings</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>NOTE:</strong> Mapping validation can generally improve both the sensitivity and specificity of mapping, with only a moderate increase in use of computational resources. Unless there is a specific reason to do this (e.g. testing on clean simulated data), <code class="language-plaintext highlighter-rouge">--validateMappings</code> is generally recommended.</p>
+
+  <p><strong>Paired-end data:</strong> If using paired-end reads, then the command would require both sets of reads to be given: <code class="language-plaintext highlighter-rouge">salmon quant -i transcripts_index -l A -1 reads1.fq -2 reads2.fq -o transcripts_quant</code></p>
+
+  <p><strong>RNA-seq bias correction:</strong> To have Salmon correct for RNA-Seq biases you will need to specify the appropriate parameters when you run it. As noted, when describing the FASTQC results, with RNA-seq data you will always observe sequence-specific biases due to the random hexamer priming and so we would always want to have that correction turned on. Before using the remaining parameters it is advisable to assess your data using tools like <a href="http://qualimap.bioinfo.cipf.es/">Qualimap</a> to look specifically for the presence of these biases in your data and decide on which parameters would be appropriate.</p>
+
+  <p>To correct for the various sample-specific biases you could add the following parameters to the Salmon command:</p>
+
+  <ul>
+    <li><code class="language-plaintext highlighter-rouge">--gcBias</code> to learn and correct for fragment-level GC biases in the input data</li>
+    <li><code class="language-plaintext highlighter-rouge">--posBias</code> will enable modeling of a position-specific fragment start distribution</li>
+  </ul>
+</blockquote>
+
+<h2 id="salmon-output">Salmon output</h2>
+
+<p>You should see a new directory has been created that is named by the string value you provided in the <code class="language-plaintext highlighter-rouge">-o</code> command. Take a look at what is contained in this directory:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ls -l Mov10_oe_1.subset.salmon/
+</code></pre></div></div>
+
+<p>There is a logs directory, which contains all of the text that was printed to screen as Salmon was running. Additionally, there is a file called <strong><code class="language-plaintext highlighter-rouge">quant.sf</code></strong>. This is the <strong>quantification file</strong> in which each row corresponds to a transcript, listed by Ensembl ID. The columns correspond to metrics for each transcript:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Name    Length  EffectiveLength TPM     NumReads <span class="c">#results at a glance look the same </span>
+ENST00000632684.1       12      2.000   0.000000        0.000
+ENST00000434970.2       9       1.000   0.000000        0.000
+ENST00000448914.1       13      2.000   0.000000        0.000
+ENST00000415118.1       8       1.000   0.000000        0.000
+ENST00000390583.1       31      2.000   0.000000        0.000
+ENST00000390577.1       37      2.000   0.000000        0.000
+ENST00000451044.1       17      2.000   0.000000        0.000
+....
+</code></pre></div></div>
+
+<ul>
+  <li>The first two columns are self-explanatory, the <strong>name</strong> of the transcript and the <strong>length of the transcript</strong> in base pairs (bp).</li>
+  <li>The <strong>effective length</strong> represents the various factors that effect the length of transcript (i.e degradation, technical limitations of the sequencing platform)</li>
+  <li>Salmon outputs ‘pseudocounts’ or ‘abundance estimates’ which predict the relative abundance of different isoforms in the form of three possible metrics (FPKM, RPKM, and TPM). <strong>TPM (transcripts per million)</strong> is a commonly used normalization method as described in <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2820677/">[1]</a> and is computed based on the effective length of the transcript. <strong>We do NOT recommend FPKM or RPKM</strong>.</li>
+  <li>Estimated <strong>number of reads</strong>, which is the estimate of the number of reads drawn from this transcript given the transcript’s relative abundance and length)</li>
+</ul>
+
+<blockquote>
+  <p><strong>NOTE:</strong> The effective gene length in a sample is the average of the transcript lengths after weighting for their relative expression. You may see effective lengths that are larger than the physical length. The interpretation would be that in this case, given the sequence composition of these transcripts (including both the sequence-specific and fragment GC biases), you’d expect a priori to sample more reads from them — thus they have a longer estimated effective length.</p>
+</blockquote>
+
+<p>This file is used as input for downstream analyses including differential gene expression analysis. For each file that you run through Salmon, you will get a correpsonding <code class="language-plaintext highlighter-rouge">quant.sf</code> file. Downstream tools like <a href="https://bioconductor.org/packages/release/bioc/html/tximport.html"><code class="language-plaintext highlighter-rouge">tximport</code></a> take these files and aggregate them to obtain expression matrices for your dataset.</p>
+
+<hr />
+
+<p><em>This lesson has been developed by members of the teaching team at the <a href="http://bioinformatics.sph.harvard.edu/">Harvard Chan Bioinformatics Core (HBC)</a>. These are open access materials distributed under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a> (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</em></p>
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc">modified-intro-to-rnaseq-hpc</a> is maintained by <a href="https://github.com/esallychang">esallychang</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>

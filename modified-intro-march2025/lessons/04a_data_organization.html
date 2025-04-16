@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Data Management and Project Organization | GitHub Pages Test</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Data Management and Project Organization" />
+<meta name="author" content="Mary Piper, Meeta Mistry, Michael Steinbaugh, Radhika Khetani, Jihe Liu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction to bulk RNA-seq" />
+<meta property="og:description" content="Introduction to bulk RNA-seq" />
+<link rel="canonical" href="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/04a_data_organization.html" />
+<meta property="og:url" content="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/04a_data_organization.html" />
+<meta property="og:site_name" content="GitHub Pages Test" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-11-09T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Data Management and Project Organization" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Mary Piper, Meeta Mistry, Michael Steinbaugh, Radhika Khetani, Jihe Liu"},"dateModified":"2020-11-09T00:00:00+00:00","datePublished":"2020-11-09T00:00:00+00:00","description":"Introduction to bulk RNA-seq","headline":"Data Management and Project Organization","mainEntityOfPage":{"@type":"WebPage","@id":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/04a_data_organization.html"},"url":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/lessons/04a_data_organization.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/assets/css/style.css?v=b507c6c38fbc65ecc2e6abea386dbda0aeab8b3b">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Data Management and Project Organization</h1>
+      <h2 class="project-tagline">Introduction to bulk RNA-seq</h2>
+      
+        <a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      
+<h2 id="learning-objectives">Learning Objectives</h2>
+
+<ul>
+  <li>Explain the need for data management.</li>
+  <li>Describe strategies for managing your own projects.</li>
+</ul>
+
+<h2 id="what-is-data-management">What is data management?</h2>
+
+<p>In this course we teach you how to independently analyze your own sequencing data, so naturally we should begin with what what to do once you get the raw data back from the sequencing facility. Obviously, we begin with the analysis! Right?</p>
+
+<p>Wrong.</p>
+
+<p>One of the most important parts of research that involves large amounts of data is how best to manage it. Once data is generated we tend to prioritize the analysis. <strong>In the excitement to get a first look at new data, there are many important aspects that are often overlooked.</strong></p>
+
+<p>Wait, don’t leave this page just yet!</p>
+
+<p>We know that data management can be hard to get excited about. However, <strong>ignoring it can be detrimental to your research.</strong> Here are just a few reasons <strong>why data management should matter to you</strong>:</p>
+
+<ul>
+  <li>It will make your life easier. It’s easier to analyze organized, and well documented data.</li>
+  <li>Your future self will thank you. Managing well from the get-go means it’s easier to retrieve at a later date.</li>
+  <li>Data is precious. Thinking ahead about things like storage means you reduce risk of losing it.</li>
+  <li>Funding agencies are increasingly mandating that research projects are developed with a data management plan.</li>
+</ul>
+
+<h3 id="data-lifecycle">Data Lifecycle</h3>
+<p>The data lifecycle displayed below, courtesy of the <a href="https://datamanagement.hms.harvard.edu/">HMS Data Management Working Group</a>, illustrates some things to consider beyond data creation and analysis. Below, we discuss components of the lifecycle and how they apply to any NGS experiment.</p>
+
+<p align="center">
+<img src="../img/data-lifecycle-base.png" width="600" />
+</p>
+
+<p><em>Image acquired from the <a href="https://datamanagement.hms.harvard.edu/data-lifecycle">Harvard Biomedical Data Management Website</a></em></p>
+
+<h3 id="plan-and-design">Plan and Design</h3>
+<p>You should approach your sequencing project in a very similar way you do with any biological experiment, and ideally, begins with a good <strong>experimental design</strong>. You want to think about experiment at the outset and collect appropriate samples such that you have enough statistical power to make the comparisons you need. In a later lesson, we delve more into the details of planning and the experimental design considerations. Planning for your computational work is just as important as planning when working on the bench. Every computational analysis you do is going to spawn many files and you will want to think about short-term storage options for your data and computational resources for analyzing it.</p>
+
+<h3 id="collect-and-create">Collect and Create</h3>
+<p>The next step is preparing samples as required. During this stage it is important to keep track of how the experiment was performed, making sure to clearly document the source of starting materials and kits used. It is also best practice to include any information about any small variations within the experiment (across the different samples being prepared) or any changes relative to standard experiment protocols. This collection of information serves as the <strong>metadata of the experiment</strong> which will prove to be very useful during the analysis stage.</p>
+
+<h3 id="analyze-and-collaborate">Analyze and Collaborate</h3>
+<p>Once you have the sequencing data back from the sequencing facility, it’s time to analyze it. The process of data analysis should be well documented to ensure reproducibility and also for ease of collaboration. We will spend some more time on this component of the lifecycle later in class, as it applies to our dataset.</p>
+
+<h3 id="evaluate-and-archive">Evaluate and Archive</h3>
+<p>When the analysis is complete you will want to think about which files are most pertinent to keep. Consider long-term storage options for your data that meet requirements of NIH, other funding agencies, and any guidelines from your institution.</p>
+
+<h3 id="disseminate-and-share">Disseminate and share</h3>
+<p>The results of your analysis will hopefully generate some exciting findings that will be beneficial to the scientific community. At this stage in the lifecycle you rely on your previous steps of documentation to turn those notes into a clear and concise methods section of your manuscript.</p>
+
+<h3 id="access-and-reuse">Access and Reuse</h3>
+<p>In addition to sharing information on the analysis, you should plan for sharing the data. It has become increasingly common for researchers to make their data available to others when they complete a study. While a major reason for sharing is compliance (with journals or research funding organizations), there are also important research benefits including reproducibility and data sharing and reuse.</p>
+
+<p><strong>Resources</strong></p>
+
+<ul>
+  <li>The <a href="https://datamanagement.hms.harvard.edu/">HMS Data Management Working Group (DMWG)’s website</a></li>
+  <li>A guide from the <a href="http://guides.library.harvard.edu/dmp">Harvard library</a>.</li>
+  <li><strong>Sign-up</strong> for the <a href="https://datamanagement.hms.harvard.edu/dmwg-newsletter">DMWG quarterly newsletter</a> for helpful tips, classes and events related to data management</li>
+</ul>
+
+<hr />
+
+<p><em>This lesson has been developed by members of the teaching team at the <a href="http://bioinformatics.sph.harvard.edu/">Harvard Chan Bioinformatics Core (HBC)</a>. These are open access materials distributed under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a> (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</em></p>
+
+<ul>
+  <li><em>The materials used in this lesson were derived from work that is Copyright © Data Carpentry (http://datacarpentry.org/). 
+All Data Carpentry instructional material is made available under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a> (CC BY 4.0).</em></li>
+  <li><em>Adapted from the lesson by Tracy Teal. Original contributors: Paul Wilson, Milad Fatenejad, Sasha Wood and Radhika Khetani for Software Carpentry (http://software-carpentry.org/)</em></li>
+</ul>
+
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc">modified-intro-to-rnaseq-hpc</a> is maintained by <a href="https://github.com/esallychang">esallychang</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>

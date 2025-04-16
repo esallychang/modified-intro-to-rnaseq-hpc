@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>GitHub Pages Test | Introduction to bulk RNA-seq</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="GitHub Pages Test" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction to bulk RNA-seq" />
+<meta property="og:description" content="Introduction to bulk RNA-seq" />
+<link rel="canonical" href="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/activities/practice_exercise.html" />
+<meta property="og:url" content="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/activities/practice_exercise.html" />
+<meta property="og:site_name" content="GitHub Pages Test" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="GitHub Pages Test" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Introduction to bulk RNA-seq","headline":"GitHub Pages Test","url":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/modified-intro-march2025/activities/practice_exercise.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/assets/css/style.css?v=b507c6c38fbc65ecc2e6abea386dbda0aeab8b3b">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/modified-intro-to-rnaseq-hpc/modified-intro-march2025/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">GitHub Pages Test</h1>
+      <h2 class="project-tagline">Introduction to bulk RNA-seq</h2>
+      
+        <a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <p><em><strong>To perform this exercise you will need an O2 account. You can request an account by following the instructions on <a href="https://harvardmed.service-now.com/stat?id=service_catalog_cards&amp;sys_id=5165e1dbdb209050b642f27139961979&amp;sysparm_category=991a7f2edb890c10b642f2713996196a">O2’s account request page</a>.</strong></em></p>
+
+<h2 id="running-the-rna-seq-workflow">Running the RNA-seq workflow</h2>
+
+<p>We have downloaded the raw FASTQ files from the SRA for the sequencing data used in the paper: <a href="https://pubmed.ncbi.nlm.nih.gov/28422762/">Silencing SMOC2 ameliorates kidney fibrosis by inhibiting fibroblast to myofibroblast transformation</a>. The paper explores kidney fibrosis in wildtype and SMOC2-overexpressing mice. </p>
+
+<blockquote>
+  <p><em><strong>NOTE:</strong> If you are interested in downloading other datasets from the SRA, we have <a href="https://hbctraining.github.io/Accessing_public_genomic_data/lessons/downloading_from_SRA.html">materials</a> available detailing how to do this.</em></p>
+</blockquote>
+
+<h3 id="set-up">Set-up</h3>
+<ol>
+  <li>Copy the compressed experimental data folder from <code class="language-plaintext highlighter-rouge">/n/groups/hbctraining/kidney_fibrosis_rnaseq.tar.gz</code> to your own <code class="language-plaintext highlighter-rouge">/n/scratch3/users/ecommonsID</code> directory.</li>
+  <li>Extract the directory using the command <code class="language-plaintext highlighter-rouge">tar -xzvf kidney_fibrosis_rnaseq.tar.gz</code>. This command may take a while to run.</li>
+  <li>
+    <p>Look inside the directory, you should find the following:</p>
+
+    <ul>
+      <li>a <code class="language-plaintext highlighter-rouge">raw_fastq</code> folder containing the raw fastq files</li>
+      <li>a <code class="language-plaintext highlighter-rouge">meta</code> folder with a metadata file containing information about each of the samples</li>
+    </ul>
+  </li>
+  <li>
+    <p>Create a <code class="language-plaintext highlighter-rouge">reference_data</code> folder and download the transcriptome FASTA file for mouse to the folder.</p>
+
+    <ul>
+      <li>For Ensembl references, go to <a href="http://useast.ensembl.org/info/data/ftp/index.html">http://useast.ensembl.org/info/data/ftp/index.html</a></li>
+      <li>Find the mouse species row and click on the <em>FASTA</em> link in the <strong>cDNA (FASTA)</strong> column.</li>
+      <li>Right-click on the link for the <code class="language-plaintext highlighter-rouge">*cdna.all.fa.gz</code> file to copy it.</li>
+      <li>Navigate to the <code class="language-plaintext highlighter-rouge">reference_data</code> folder and run the command <code class="language-plaintext highlighter-rouge">wget &lt;paste contents of link&gt;</code>. This should download the transcriptome FASTA file to the directory.</li>
+      <li>Extract the <code class="language-plaintext highlighter-rouge">*cdna.all.fa.gz</code> file by running the code: <code class="language-plaintext highlighter-rouge">gzip -d *cdna.all.fa.gz</code>.</li>
+    </ul>
+  </li>
+  <li>Set-up additional expected folders (e.g. results, etc.) for your project (i.e. create subdirectories and additional directories where you feel is necessary). </li>
+</ol>
+
+<h3 id="analysis">Analysis</h3>
+<p>Using the workflow and submission scripts we generated in class, parallelize the RNA-Seq analysis of all files in this dataset. For each FASTQ file you will need to perform the following:</p>
+
+<ul>
+  <li>Run FastQC</li>
+  <li>Generate abundance estimates with Salmon</li>
+  <li>Evaluate the MultiQC report</li>
+</ul>
+
+<p><strong>HINT: You will need to create a mouse index for Salmon.</strong> </p>
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc">modified-intro-to-rnaseq-hpc</a> is maintained by <a href="https://github.com/esallychang">esallychang</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>
