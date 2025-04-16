@@ -1,9 +1,5 @@
 # This is a test page for github pages deployment
 
-| Audience | Computational skills required | Duration |
-:----------|:----------|:----------|
-| Biologists | None | 3-session online workshop (~7.5 hours of trainer-led time) |
-
 ### Description
 
 This repository has teaching materials for a 2-day Introduction to RNA-sequencing data analysis workshop. This workshop focuses on teaching basic computational skills to enable the effective use of an high-performance computing environment to implement an RNA-seq data analysis workflow. It includes an introduction to shell (bash) and shell scripting. In addition to running the RNA-seq workflow from FASTQ files to count data using Salmon, the workshop covers best practice guidelines for RNA-seq experimental design and data organization/management.
