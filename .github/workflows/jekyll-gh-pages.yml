@@ -35,7 +35,7 @@ jobs:
       - name: Configure _config.yml
         if: (github.head_ref || github.ref_name) != 'main'
         run: |
-          echo -e "\nbaseurl: '/branched-docs-demo/${{ github.head_ref || github.ref_name }}'" >> ./_config.yml
+          echo -e "\nbaseurl: '/${{ github.event.repository.name }}/${{ github.head_ref || github.ref_name }}'" >> ./_config.yml
           cat ./_config.yml
       - name: Setup Pages
         uses: actions/configure-pages@v5
