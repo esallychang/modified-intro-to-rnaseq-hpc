@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Intro to RNA-seq | GitHub Pages Test</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Intro to RNA-seq" />
+<meta name="author" content="Modified by Sally Chang at NICHD" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction to bulk RNA-seq" />
+<meta property="og:description" content="Introduction to bulk RNA-seq" />
+<link rel="canonical" href="https://esallychang.github.io/branched-docs-demo/modified-intro-apr2025/lessons/01_intro-to-RNAseq.html" />
+<meta property="og:url" content="https://esallychang.github.io/branched-docs-demo/modified-intro-apr2025/lessons/01_intro-to-RNAseq.html" />
+<meta property="og:site_name" content="GitHub Pages Test" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-09-25T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Intro to RNA-seq" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Modified by Sally Chang at NICHD"},"dateModified":"2024-09-25T00:00:00+00:00","datePublished":"2024-09-25T00:00:00+00:00","description":"Introduction to bulk RNA-seq","headline":"Intro to RNA-seq","mainEntityOfPage":{"@type":"WebPage","@id":"https://esallychang.github.io/branched-docs-demo/modified-intro-apr2025/lessons/01_intro-to-RNAseq.html"},"url":"https://esallychang.github.io/branched-docs-demo/modified-intro-apr2025/lessons/01_intro-to-RNAseq.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/branched-docs-demo/modified-intro-apr2025/assets/css/style.css?v=87a9a2fb36f3c188329919d44a75ffa9e0498d0d">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/branched-docs-demo/modified-intro-apr2025/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Intro to RNA-seq</h1>
+      <h2 class="project-tagline">Introduction to bulk RNA-seq</h2>
+      
+        <a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <p>Approximate time: 90 minutes</p>
+
+<h2 id="learning-objectives">Learning Objectives:</h2>
+
+<ul>
+  <li>Describe applications of RNA sequencing</li>
+  <li>Describe the process of RNA-seq library preparation</li>
+  <li>Describe the Illumina sequencing method</li>
+</ul>
+
+<h2 id="introduction-to-rna-seq">Introduction to RNA-seq</h2>
+
+<p>RNA-seq is an exciting experimental technique that is utilized to explore and/or quantify gene expression within or between conditions.</p>
+
+<p>As we know, genes provide instructions to make proteins, which perform some function within the cell. Although <strong>all cells contain the same DNA sequence</strong>, muscle cells are different from nerve cells and other types of cells because of the <strong>different genes that are turned on in these cells and the different RNAs and proteins produced</strong>.</p>
+
+<p align="center">
+
+<img src="../img/gene_expression_cells.png" width="600" />
+
+</p>
+
+<p>Different biological processes, as well as mutations, can affect which genes are turned on and which are turned off, in addition to <em>how much</em> specific genes are turned on/off.</p>
+
+<p>To make proteins, the DNA is transcribed into messenger RNA, or mRNA, which is translated by the ribosome into protein. However, some genes encode RNA that does not get translated into protein; these RNAs are called non-coding RNAs, or ncRNAs. Often these RNAs have a function in and of themselves and include rRNAs, tRNAs, and siRNAs, among others. All RNAs transcribed from genes are called transcripts.</p>
+
+<p align="center">
+
+<img src="../img/Gene_products.png" width="400" />
+
+</p>
+
+<p>To be translated into proteins, the RNA must undergo processing to generate the mRNA. In the figure below, the top strand in the image represents a gene in the DNA, comprised of the untranslated regions (UTRs) and the open read frame. Genes are transcribed into pre-mRNA, which still contains the intronic sequences. After post-transciptional processing, the introns are spliced out and a polyA tail and 5’ cap are added to yield mature mRNA transcripts, which can be translated into proteins.</p>
+
+<p align="center">
+
+<img src="../img/Gene_structure.png" width="600" />
+
+</p>
+
+<p><strong>While mRNA transcripts have a polyA tail, many of the non-coding RNA transcripts do not as the post-transcriptional processing is different for these transcripts.</strong></p>
+
+<h3 id="transcriptomics">Transcriptomics</h3>
+
+<p>The transcriptome is defined as a collection of all the transcript readouts present in a cell. RNA-seq data can be used to explore and/or quantify the transcriptome of an organism, which can be utilized for the following types of experiments:</p>
+
+<ul>
+  <li><strong>Differential Gene Expression</strong>: <em>quantitative</em> evaluation and comparison of transcript levels (bulk and single-cell)</li>
+  <li><strong>Experession profiling</strong> of small cell populations (single cell)</li>
+  <li><strong>Transcriptome assembly</strong>: building the profile of transcribed regions of the genome, a <em>qualitative</em> evaluation.</li>
+  <li>Can be used to <strong>help build better gene models</strong>, and verify them using the assembly</li>
+  <li><strong>Metatranscriptomics</strong> or community transcriptome analysis</li>
+</ul>
+
+<h2 id="illumina-library-preparation">Illumina library preparation</h2>
+
+<p>When starting an RNA-seq experiment, for every sample the RNA needs to be isolated and turned into a cDNA library for sequencing. The general workflow for library preparation is detailed in the step-by-step images below.</p>
+
+<p><strong>Briefly, the RNA is isolated from the sample and contaminating DNA is removed with DNase.</strong></p>
+
+<p align="center">
+
+<img src="../img/libraryprep_step1-2.png" width="400" />
+
+</p>
+
+<p><strong>The RNA sample then undergoes either selection of the mRNA (polyA selection) or depletion of the rRNA. The resulting RNA is fragmented.</strong></p>
+
+<blockquote>
+  <p>Generally, ribosomal RNA represents the majority of the RNAs present in a cell, while messenger RNAs represent a small percentage of total RNA, ~2% in humans. Therefore, if we want to study the protein-coding genes, we need to enrich for mRNA or deplete the rRNA. <strong>For differential gene expression analysis, it is best to enrich for Poly(A)+, unless you are aiming to obtain information about long non-coding RNAs, then do a ribosomal RNA depletion.</strong></p>
+</blockquote>
+
+<blockquote>
+  <p><em>The size of the target fragments in the final library is a key parameter for library construction. DNA fragmentation is typically done by physical methods (i.e., acoustic shearing and sonication) or enzymatic methods (i.e., non-specific endonuclease cocktails and transposase tagmentation reactions.</em></p>
+</blockquote>
+
+<p align="center">
+
+<img src="../img/libraryprep_step3.png" width="450" />
+
+</p>
+
+<p><strong>The RNA is then reverse transcribed into double-stranded cDNA and sequence adapters are then added to the ends of the fragments.</strong></p>
+
+<blockquote>
+  <p>The cDNA libraries can be generated in a way to retain information about which strand of DNA the RNA was transcribed from. Libraries that retain this information are called stranded libraries, which are now standard with Illumina’s TruSeq stranded RNA-Seq kits. Stranded libraries should not be any more expensive than unstranded, so there is not really any reason not to acquire this additional information.</p>
+
+  <p>There are 3 types of cDNA libraries available:</p>
+
+  <ul>
+    <li>Forward (secondstrand) – reads resemble the gene sequence or the secondstrand cDNA sequence</li>
+    <li>Reverse (firststrand) – reads resemble the complement of the gene sequence or firststrand cDNA sequence (TruSeq)</li>
+    <li>Unstranded</li>
+  </ul>
+</blockquote>
+
+<p align="center">
+
+<img src="../img/libraryprep_step4-5.png" width="450" />
+
+</p>
+
+<p><strong>Finally, the fragments are PCR amplified if needed, and the fragments are size selected (usually ~300-500bp) to finish the library.</strong></p>
+
+<p align="center">
+
+<img src="../img/libraryprep_step6.png" width="450" />
+
+</p>
+
+<p><em>Image credit: <a href="https://www.nature.com/articles/nrg3068">Martin J.A. and Wang Z., Nat. Rev. Genet. (2011) 12:671–682</a></em></p>
+
+<h2 id="illumina-sequencing">Illumina Sequencing</h2>
+
+<h3 id="single-end-versus-paired-end">Single-end versus Paired-end</h3>
+
+<p>After preparation of the libraries, sequencing can be performed to generate the nucleotide sequences of the ends of the fragments, which are called <strong>reads</strong>. You will have the choice of sequencing a single end of the cDNA fragments (single-end reads) or both ends of the fragments (paired-end reads).</p>
+
+<p align="center">
+
+<img src="../img/paired_end_reads.png" width="500" />
+
+</p>
+
+<ul>
+  <li>SE - Single end dataset =&gt; Only Read1</li>
+  <li>PE - Paired-end dataset =&gt; Read1 + Read2
+    <ul>
+      <li>can be 2 separate FastQ files or just one with interleaved pairs</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Generally single-end sequencing is sufficient unless it is expected that the reads will match multiple locations on the genome (e.g. organisms with many paralogous genes), assemblies are being performed, or for splice isoform differentiation. Be aware that paired-end reads are generally 2x more expensive.</p>
+
+<h3 id="different-sequencing-platforms">Different sequencing platforms</h3>
+
+<p>There are a variety of Illumina platforms to choose from to sequence the cDNA libraries.</p>
+
+<p align="center">
+
+<img src="../img/illumina_platforms.png" width="600" />
+
+</p>
+
+<p><em>Image credit: Adapted from <a href="www.illumina.com">Illumina</a></em></p>
+
+<p>Differences in platform can alter the length of reads generated, the quality of reads, as well as the total number of reads sequenced per run and the amount of time required to sequence the libraries. The different platforms each use a different flow cell, which is a glass surface coated with an arrangement of paired oligos that are complementary to the adapters added to your template molecules. <strong>The flow cell is where the sequencing reactions take place</strong>.</p>
+
+<p align="center">
+
+<img src="../img/flow_cell_oligos.png" width="600" />
+
+</p>
+
+<p><em>Image credit: Adapted from <a href="www.illumina.com">Illumina</a></em></p>
+
+<h3 id="sequencing-by-synthesis">Sequencing-by-synthesis</h3>
+
+<p>Illumina sequencing technology uses a sequencing-by-synthesis approach which is described in more detail below.</p>
+
+<h4 id="cluster-generation">Cluster Generation</h4>
+
+<p>The DNA fragments in the cDNA library are denatured and applied to the glass flow cell. These denatured fragments bind to the complementary oligos that are already covalently bound to the flow cell lanes, resulting in attachment. Once the fragments have attached, a phase called <strong>cluster generation begins</strong>.</p>
+
+<p>During this step, single fragments are clonally amplified to create a cluster (fragments in close proximity) of identical fragments. This is necessary so that the fluorescence can be readily captured from each cluster (during nucleotide incorporation), instead of just a single fragment. The process of cluster generation is described in the four steps below, using a single fragment as an example.</p>
+
+<ol>
+  <li>Synthesize the complement with polymerase.</li>
+  <li>The dsDNA is denatured, and the original DNA is washed away leaving the synthesized strand covalently bound to the flow cell.</li>
+  <li>The single strand hybridises with an adjacent adapter to form a ‘bridge’.</li>
+  <li>dsDNA is extended by polymerase. Now each strand is covalently bound to a different adapter on the flow cell.</li>
+</ol>
+
+<p align="center">
+
+<img src="../img/cluster_generation.png" width="700" />
+
+</p>
+
+<p>The process above is repeated many times to clonally amplify all unique fragments on flow cell to form clusters of identical sequence.</p>
+
+<p align="center">
+
+<img src="../img/clonal_amplification.png" width="600" />
+
+</p>
+
+<blockquote>
+  <p><strong>NOTE:</strong> Keep in mind, this is happening for millions of fragments in parallel on the flow cell.</p>
+</blockquote>
+
+<h4 id="sequencing-by-synthesis--image-acquisition">Sequencing by synthesis (&amp; image acquisition)</h4>
+
+<p>After cluster generation, fluorescently-tagged nucleotides are incorporated one at a time (cyclically) and fluorescence images are captured to identify which nucleotide gets incorporated into each cluster in each cycle.</p>
+
+<ul>
+  <li>Denature clusters and then block 3’ ends to prevent unwanted priming.</li>
+  <li>Hybridize sequencing primers to the adapter sequence at the loose ends.</li>
+  <li>Cycle four NTPs with fluorescent markers, terminator sequence and polymerases.</li>
+  <li>Once an NTP is incorporated, the cluster is excited by a light source and a characteristic fluorescent signal is emitted.</li>
+  <li>The color is recorded by the camera, then the terminator on dye is cleaved and washed. The <strong>process repeats for a specified number of cycles</strong>.</li>
+</ul>
+
+<p align="center">
+
+<img src="../img/sbs_image.png" width="500" />
+
+</p>
+
+<h4 id="base-calling">Base Calling</h4>
+
+<p>Illumina has a proprietary software that goes through all the images captured in the previous stage and generates text files with sequence information about each cluster based on the levels of fluorescence observed. In addition to calling the bases, this software assigns a probability score to indicate how certain it was about the calling something an “A”, a “T”, a “G” or a “C”.</p>
+
+<p align="center">
+
+<img src="../img/base_calling.png" width="500" />
+
+</p>
+
+<blockquote>
+  <p>If there are any ambiguities, e.g. at a certain cycle the image for a cluster does not have a distinct color that can be associated with a specific nucleotide, the base calling software will have a low probability associated with it and would assign an “N” instead of “A”, “T”, “G” or “C”.</p>
+</blockquote>
+
+<p>In closing, * <strong>Number of clusters ~= Number of reads</strong> * <strong>Number of sequencing cycles = Length of reads</strong></p>
+
+<p>The number of cycles (length of the reads) will depend on sequencing platform used as well as your preferences.</p>
+
+<blockquote>
+  <p><strong>NOTE</strong>. If you want to explore sequencing by synthesis in more depth, we recommend this really nice animation <a href="https://www.youtube.com/watch?v=fCd6B5HRaZ8">available on Illumina’s YouTube channel</a>.</p>
+</blockquote>
+
+<h3 id="multiplexing">Multiplexing</h3>
+
+<p>Depending on the Illumina platform (MiSeq, HiSeq, NextSeq), the number of lanes per flow cell, and the number of reads that can be obtained per lane varies widely. <strong>You will need to decide on how many reads you would like per sample</strong> (i.e. the sequencning depth) and then based on the platform you choose calculate how many total lanes you will require for your set of samples. We will talk more about considerations when making this decision in the next lesson on <a href="/branched-docs-demo/modified-intro-apr2025/lessons/02_experimental_planning_considerations.html">Experimental Considerations</a></p>
+
+<p>Typically, charges for sequencing are per lane of the flow cell and you will be able to run multiple samples per lane. Illumina has therefore devised a nice multiplexing method which allows libraries from several samples to be pooled and sequenced simultaneously in the same lane of a flow cell. This method requires <strong>the addition of indices</strong> (within the Illumina adapter) or special barcodes (outside the Illumina adapter) as described in the schematic below.</p>
+
+<p align="center">
+
+<img src="../img/demultiplexing.png" width="800" />
+
+</p>
+
+<blockquote>
+  <p><strong>NOTE:</strong> The workflow presented in this lesson is specific to Illumina sequencing, which is currently the most utilized sequencing method. But there are other long-read sequencing methods worth noting, such as:</p>
+
+  <ul>
+    <li>Pacific Biosciences: <a href="http://www.pacb.com/">http://www.pacb.com/</a></li>
+    <li>Oxford Nanopore (MinION): <a href="https://nanoporetech.com/">https://nanoporetech.com/</a></li>
+    <li>10X Genomics: <a href="https://www.10xgenomics.com/">https://www.10xgenomics.com/</a></li>
+  </ul>
+
+  <p>Advantages and disadvantages of these technologies can be explored in the table below:</p>
+
+  <p><img src="../img/long_read_tech.png" width="600" /></p>
+</blockquote>
+
+<hr />
+
+<p><em>This lesson has been developed by members of the teaching team at the <a href="http://bioinformatics.sph.harvard.edu/">Harvard Chan Bioinformatics Core (HBC)</a>. These are open access materials distributed under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a> (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</em></p>
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc">modified-intro-to-rnaseq-hpc</a> is maintained by <a href="https://github.com/esallychang">esallychang</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>
