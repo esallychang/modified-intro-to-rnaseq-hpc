@@ -7,6 +7,7 @@ on:
     branches:
     - main
     - site-v*
+    - modified-intro-*202*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
