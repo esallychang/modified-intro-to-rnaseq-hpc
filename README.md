@@ -1,4 +1,4 @@
-# Introduction to RNA-seq using high-performance computing (HPC): TEST for jan cohort
+# Introduction to RNA-seq using high-performance computing (HPC)
 
 
 ### Description
