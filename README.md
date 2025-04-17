@@ -1,8 +1,5 @@
-# Introduction to RNA-seq using high-performance computing (HPC): TEST
+# Introduction to RNA-seq using high-performance computing (HPC): TEST for jan cohort
 
-| Audience | Computational skills required | Duration |
-:----------|:----------|:----------|
-| Biologists | None | 3-session online workshop (~7.5 hours of trainer-led time) |
 
 ### Description
 
