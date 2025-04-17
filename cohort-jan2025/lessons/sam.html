@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>samtools extras | GitHub Pages Test</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="samtools extras" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction to bulk RNA-seq" />
+<meta property="og:description" content="Introduction to bulk RNA-seq" />
+<link rel="canonical" href="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/sam.html" />
+<meta property="og:url" content="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/sam.html" />
+<meta property="og:site_name" content="GitHub Pages Test" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="samtools extras" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Introduction to bulk RNA-seq","headline":"samtools extras","url":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/sam.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/modified-intro-to-rnaseq-hpc/cohort-jan2025/assets/css/style.css?v=8eca8df006e778863fd37408e6d5e641f557c872">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/modified-intro-to-rnaseq-hpc/cohort-jan2025/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">samtools extras</h1>
+      <h2 class="project-tagline">Introduction to bulk RNA-seq</h2>
+      
+        <a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h2 id="samtools--extras">samtools  extras</h2>
+
+<p>To play around with a few <code class="language-plaintext highlighter-rouge">samtools</code> commands, first change directories into the directory containing all BAM files.</p>
+
+<p><code class="language-plaintext highlighter-rouge">$ cd ~/unix_workshop/rnaseq/results/STAR/bams</code></p>
+
+<h3 id="write-only-mapped-reads-to-file-filter-out-unmapped-reads">Write only mapped reads to file (filter out unmapped reads)</h3>
+
+<p><code class="language-plaintext highlighter-rouge">$ samtools view -b -h -F 4 Mov10_oe_1_Aligned.sortedByCoord.out.bam &gt; Mov10_oe_1_Aligned.onlyAligned.bam</code></p>
+
+<h3 id="create-a-fastq-file-containing-only-mapped-reads">Create a FASTQ file containing only mapped reads</h3>
+
+<p><code class="language-plaintext highlighter-rouge">$ bamtofastq -o Mov10_oe_1_Mapped.fastq --no-unaligned Mov10_oe_1_Aligned.onlyMapped.bam</code></p>
+
+<h3 id="index-bam-file">Index BAM file</h3>
+
+<p><code class="language-plaintext highlighter-rouge">$ samtools index Mov10_oe_1_Aligned.sortedByCoord.out.bam</code></p>
+
+<h3 id="extract-reads-from-a-specific-region-of-the-chromosome">Extract reads from a specific region of the chromosome</h3>
+
+<p><code class="language-plaintext highlighter-rouge">$samtools view  Mov10_oe_1_Aligned.sortedByCoord.out.bam chr1:200000-500000</code></p>
+
+<h3 id="randomly-subsample-half-of-the-reads-into-a-new-bam-file">Randomly subsample half of the reads into a new BAM file</h3>
+
+<p><code class="language-plaintext highlighter-rouge">$ samtools view -s 0.5 -b Mov10_oe_1_Aligned.sortedByCoord.out.bam &gt; Mov10_oe_1_subsample.bam</code></p>
+
+<h3 id="simple-stats-for-alignment-file">Simple stats for alignment file</h3>
+
+<p><code class="language-plaintext highlighter-rouge">$ samtools flagstat Mov10_oe_1_Aligned.sortedByCoord.out.bam</code></p>
+
+<h3 id="visualizing-mismatches">Visualizing mismatches</h3>
+
+<p><code class="language-plaintext highlighter-rouge">$ samtools view -h Mov10_oe_1_Aligned.sortedByCoord.out.bam | head -n 5 | samtools fillmd -e - ~/unix_workshop/rnaseq/reference_data/chr1.fa</code></p>
+
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc">modified-intro-to-rnaseq-hpc</a> is maintained by <a href="https://github.com/esallychang">esallychang</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>

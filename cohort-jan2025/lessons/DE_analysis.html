@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Learning Objectives: | GitHub Pages Test</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Learning Objectives:" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction to bulk RNA-seq" />
+<meta property="og:description" content="Introduction to bulk RNA-seq" />
+<link rel="canonical" href="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/DE_analysis.html" />
+<meta property="og:url" content="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/DE_analysis.html" />
+<meta property="og:site_name" content="GitHub Pages Test" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Learning Objectives:" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Introduction to bulk RNA-seq","headline":"Learning Objectives:","url":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/DE_analysis.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/modified-intro-to-rnaseq-hpc/cohort-jan2025/assets/css/style.css?v=8eca8df006e778863fd37408e6d5e641f557c872">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/modified-intro-to-rnaseq-hpc/cohort-jan2025/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Learning Objectives:</h1>
+      <h2 class="project-tagline">Introduction to bulk RNA-seq</h2>
+      
+        <a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h2 id="learning-objectives">Learning Objectives:</h2>
+<hr />
+
+<ul>
+  <li>Learning how to run R scripts from the command line</li>
+  <li>Use the count matrix as input to an R script for differential expression analysis</li>
+  <li>Apply Unix commands to look at the results that are generated and extract relevant information</li>
+  <li>Familiarize yourself with various functional analysis tools for gene lists</li>
+</ul>
+
+<h2 id="differential-expression-analysis">Differential expression analysis</h2>
+<hr />
+
+<p>At the end of the workflow from the last lesson, our final end product was a count matrix. This is a matrix in which each row represents a gene (or feature) and each column corresponds to a sample. In our dataset, we have two sample classes (control and Mov10oe) and we want to assess the difference in expression between these groups on a gene-by-gene basis.</p>
+
+<p align="center">
+<img src="../img/de_variation.png" width="600" />
+</p>
+
+<p><em>Illustration taken from slides courtesy of Dr. Paul Pavlidis, UBC</em></p>
+
+<p>Since we know which samples belong to which group, we could just compute a fold-change for each gene and then rank genes by that value. Easy, right? Not exactly.</p>
+
+<p>The problem is, the <strong>gene expression changes</strong> we observe are not just a result of the differences between the groups that we are investigating, rather it <strong>is a measurement of the sum of many effects</strong>. In a set of biological samples the transcriptional patterns can be associated not only with our experimetal variable(s) but also many extraneous factors; some that we are aware of (i.e demographic factors, batch information) and sources that are unknown. The goal of differential expression analysis to determine the relative role of these effects, and to <strong>separate the “interesting” from the “uninteresting”.</strong></p>
+
+<h3 id="statistical-models-in-r">Statistical models in R</h3>
+
+<p><a href="https://www.r-project.org/">R</a> is a software environment for statistical computing and graphics. R is widely used in the field of bioinformatics, amongst various other disciplines.</p>
+
+<p align="center">
+<img src="../img/why_R.png" width="600" />
+</p>
+
+<p>It can be locally installed on almost all operating systems (and it’s free!), with numerous packages available that help in increasing efficency of data handling, data manipulation and data analysis. Discussing the specifics about R is outside the scope of this course. However, we encourage you to take a look at some of the R resources listed below if you are interested in learning more.</p>
+
+<p>R is a powerful language that can be very useful for NGS data analysis, and there are many popular packages for working with RNA-Seq count data. Some of these packages include <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/edgeR/inst/doc/edgeRUsersGuide.pdf">edgeR</a>, <a href="http://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf">DESeq2</a>, and <a href="http://www.genomebiology.com/2014/15/2/R29">limma-voom</a>. All of these tools use statistical modeling of the count data to test each gene against the null hypothesis and evaluate whether or not it is significantly differentially expressed.</p>
+
+<p align="center">
+<img src="../img/de_norm_counts_var.png" width="400" />
+</p>
+
+<p>These methods determine, for each gene, whether the differences in expression (counts) <strong>between groups</strong> is significant given the amount of variation observed <strong>within groups</strong> (replicates). To test for significance, we need an appropriate statistical model that accurately performs normalization (to account for differences in sequencing depth, etc.) and variance modeling (to account for few numbers of replicates and large dynamic expression range). The details on how each package works is described thoroughly within each of the respective vignettes.</p>
+
+<h3 id="running-r-scripts">Running R scripts</h3>
+
+<p>In order to run R on O2, let’s first <strong>log on to the cluster and start an interactive session with a single core</strong>.</p>
+
+<p>Once you are in an interactive session, navigate to the <code class="language-plaintext highlighter-rouge">rnaseq</code> directory:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd ~/rnaseq
+</code></pre></div></div>
+
+<p>We will be running an R script that uses the R package <a href="http://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a> to identify differentially expressed genes. This package is available from <a href="https://www.bioconductor.org/">Bioconductor</a>, which is a repository of packages for the analysis of high-throughput genomic data. There are also a few other packages that are required to generate some additional figures.</p>
+
+<p>We first need to load the R module and the GCC compiler:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>module load gcc/6.2.0 R/3.4.1
+</code></pre></div></div>
+<p>You can open R by simply typing <code class="language-plaintext highlighter-rouge">R</code> at the command prompt and pressing <code class="language-plaintext highlighter-rouge">Enter</code>. You are now in the R console (note that the command prompt has changed to a <code class="language-plaintext highlighter-rouge">&gt;</code> instead of a <code class="language-plaintext highlighter-rouge">$</code>):</p>
+
+<p align="center">
+&lt;img src="../img/R_screenshot2.png")
+</p>
+
+<p>Installing packages can be timely and particularly cumbersome when doing this on a cluster environment. So rather than installing packages we have instructions for you to use the libraries from our installation.</p>
+
+<blockquote>
+  <p><strong>NOTE:</strong>  Packages are bundles of code that perform functions and include detailed documentation on how to use those functions. Once installed, they are referred to as <em>libraries</em>.</p>
+</blockquote>
+
+<p><strong>To use the libraries we have created for you first exit R with:</strong></p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">q</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+<p>You should find yourself back at the shell command prompt. The next few lines will set the environment variable <code class="language-plaintext highlighter-rouge">R_LIBS_USER</code> to let R know where the R libraries directory resides.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># check if the variable is already set </span>
+<span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$R_LIBS_USER</span> 
+
+<span class="c"># If the above command returns nothing, then run the command below</span>
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">R_LIBS_USER</span><span class="o">=</span><span class="s2">"/n/groups/hbctraining/R/library/"</span>
+</code></pre></div></div>
+
+<p>To run differential expression analysis, we are going to run a script from the <code class="language-plaintext highlighter-rouge">results</code> directory, so let’s navigate there and create a directory for the results of our analysis. We will call the directory <code class="language-plaintext highlighter-rouge">diffexpression</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> ~/rnaseq/results
+<span class="nv">$ </span><span class="nb">mkdir </span>diffexpression
+</code></pre></div></div>
+<p>First, let’s copy over the script file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cp</span> /n/groups/hbctraining/intro_rnaseq_hpc/DESeq2_script.R diffexpression/
+</code></pre></div></div>
+
+<p>The DE script will require as input <strong>1) your count matrix file</strong> and <strong>2) a metadata file</strong>. The count matrix we generated in the last lesson and is in the <code class="language-plaintext highlighter-rouge">counts</code> directory. The metadata file is a tab-delimited file which contains any information associated with our samples. Each row corresponds to a sample and each column contains some information about each sample.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cp</span> ~/unix_lesson/other/Mov10_rnaseq_metadata.txt diffexpression
+</code></pre></div></div>
+<blockquote>
+  <p><strong>NOTE:</strong> If you <em>didn’t generate this file in class</em> we have a pre-computed count matrix generated that you can use:</p>
+
+  <p><code class="language-plaintext highlighter-rouge">$ cp /groups/hbctraining/intro_rnaseq_hpc/counts_STAR/Mov10_rnaseq_counts_complete.txt diffexpression</code></p>
+
+</blockquote>
+
+<p>Once you have the files copied, take a quick look at the metadata using <code class="language-plaintext highlighter-rouge">less</code>.</p>
+
+<p>Now we’re all setup to run our R script! Let’s run it from within our <code class="language-plaintext highlighter-rouge">diffexpression</code> directory,</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd </span>diffexpression
+<span class="nv">$ </span>Rscript DESeq2_script.R Mov10_rnaseq_counts_complete.txt Mov10_rnaseq_metadata.txt 
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>NOTE:</strong> You will notice chunks of code in the text that correspond to plotting figures, and these chunks have been commented out. The reason for this is in order to generate figures on <strong>O2 you require the X11 system</strong>, which we are currently not setup to do with the training accounts. If you are interested in learning more about using X11 applications you can <a href="https://wiki.rc.hms.harvard.edu/display/O2/Using+X11+Applications+Remotely">find out more on the O2 wiki page</a>.</p>
+</blockquote>
+
+<h3 id="gene-list-exploration">Gene list exploration</h3>
+
+<p>There are two results files generated from <code class="language-plaintext highlighter-rouge">DE_script.R</code>, a full table and significant genes table (at FDR &lt; 0.05). Take a look at the significant results file and see what values have been reported:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">head </span>DEresults_sig_table.txt
+</code></pre></div></div>
+<p>You should have a table with 7 columns in it:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">Gene symbols</code> (this will not have a column name, due to the nature of the <code class="language-plaintext highlighter-rouge">write</code> function)</li>
+  <li><code class="language-plaintext highlighter-rouge">baseMean</code>: the average normalized counts across all samples</li>
+  <li><code class="language-plaintext highlighter-rouge">log2FoldChange</code></li>
+  <li><code class="language-plaintext highlighter-rouge">lfcse</code>: the standard error of the log2 FC</li>
+  <li><code class="language-plaintext highlighter-rouge">stat</code>: the Wald test statistic</li>
+  <li><code class="language-plaintext highlighter-rouge">pvalue</code></li>
+  <li><code class="language-plaintext highlighter-rouge">padj</code>: p-value adjusted for multiple test correction using the BH method</li>
+</ol>
+
+<p>Since we have the full table of results for all genes, we could apply a filter based on the <code class="language-plaintext highlighter-rouge">padj</code> column to keep only genes we consider significant. We could also increase the stringency by adding in a fold change criteria. Alternatively, the full table can be useful for investigating groups of interesting genes of that are co-regulated but did not appear in our significant list.</p>
+
+<p>Using <code class="language-plaintext highlighter-rouge">wc -l</code> find out how many genes are identified in the significant table. Keep in mind this is generated using the truncated dataset.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">wc</span> <span class="nt">-l</span> DEresults_sig_table.txt
+</code></pre></div></div>
+
+<p>For downstream analysis, the relevant information that we will require from this results table is the gene names and the FDR value. We can cut the columns to a new file and and use that as input to some functional analaysis tools.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cut</span> <span class="nt">-f1</span>,7 DEresults_sig_table.txt <span class="o">&gt;</span> Mov10_sig_genelist.txt
+</code></pre></div></div>
+
+<p>Since the list we have is generated from analaysis on a small subset of chromosome 1, using these genes as input to downstream tools will not provide any meaningful results. As such, <strong>we have generated a list using the full dataset for these samples and can be downloaded to your laptop via <a href="">this link</a>.</strong></p>
+
+<h2 id="differential-expression-analysis-using-pseudocounts">Differential expression analysis using pseudocounts</h2>
+<hr />
+
+<p>In the script described above, we used count data generated from the standard RNA-seq workflow as input. The instructions are below to <strong>perform a similar analysis with the output from Salmon, but on your local laptop</strong>. To perform this analysis, you will need to use R and Rstudio directly. We do not have a script available that works on O2.</p>
+
+<p><strong>The rest of this section assumes that you are comfortable with R and RStudio.</strong></p>
+
+<p>The output from Salmon is transcript counts, but DESeq2 works well only with gene counts. To bridge this gap, the developers of DESeq2 have developed a package makes the output of Salmon compatible with DESeq2. This package is called <a href="https://bioconductor.org/packages/release/bioc/html/tximport.html"><code class="language-plaintext highlighter-rouge">tximport</code></a> and is also available through Bioconductor. <code class="language-plaintext highlighter-rouge">tximport</code> imports transcript-level abundance, estimated counts and transcript lengths, and summarizes this into matrices for use with downstream gene-level analysis packages.</p>
+
+<p>First, you have to download the directory with the quant.sf files for the 8 full datasets using the link below. Once you have them downloaded continue to follow the rest of instructions:</p>
+
+<ol>
+  <li><a href="https://www.dropbox.com/s/aw170f8zge01jpq/salmon.zip?dl=0">Download Salmon files</a></li>
+  <li>Decompress (unzip) the zip archive and move the folder to an appropriate location (i.e <code class="language-plaintext highlighter-rouge">~/Desktop</code>)</li>
+  <li>Open RStudio and select ‘File’ -&gt; ‘New Project’  -&gt; ‘Existing Directory’ and navigate to the <code class="language-plaintext highlighter-rouge">salmon</code> directory</li>
+  <li>Open up a new R script (‘File’ -&gt; ‘New File’ -&gt; ‘Rscript’), and save it as <code class="language-plaintext highlighter-rouge">salmon_de.R</code></li>
+</ol>
+
+<p>Your Rstudio interface should look something like the screenshot below:</p>
+
+<p><img src="../img/salmon_rstudio.png" size="600" /></p>
+
+<p>To perform this analysis you will have to install the following libraries:</p>
+
+<p><code class="language-plaintext highlighter-rouge">tximport</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">readr</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">DESeq2</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">biomaRt</code></p>
+
+<p><strong>Step 1:</strong> Load the required libraries:</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Load libraries</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">tximport</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">readr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">DESeq2</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">biomaRt</span><span class="p">)</span><span class="w"> </span><span class="c1"># tximport requires gene symbols as row names</span><span class="w">
+</span></code></pre></div></div>
+
+<p><strong>Step 2:</strong> Load the quantification data that was output from Salmon:</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## List all directories containing data  </span><span class="w">
+</span><span class="n">samples</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">list.files</span><span class="p">(</span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"."</span><span class="p">,</span><span class="w"> </span><span class="n">full.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">,</span><span class="w"> </span><span class="n">pattern</span><span class="o">=</span><span class="s2">"\\.salmon$"</span><span class="p">)</span><span class="w">
+    
+</span><span class="c1">## Obtain a vector of all filenames including the path</span><span class="w">
+</span><span class="n">files</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">file.path</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span><span class="w"> </span><span class="s2">"quant.sf"</span><span class="p">)</span><span class="w">
+    
+</span><span class="c1">## Since all quant files have the same name it is useful to have names for each element</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">samples</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The <strong>main objective here is to add names to our quant files which will allow us to easily discriminate between samples in the final output matrix</strong>.</p>
+
+<p><strong>Step 3.</strong> Create a dataframe containing Ensembl Transcript IDs and Gene symbols</p>
+
+<p>Our Salmon index was generated with transcript sequences listed by Ensembl IDs, but <code class="language-plaintext highlighter-rouge">tximport</code> needs to know <strong>which genes these transcripts came from</strong>, so we need to use the <code class="language-plaintext highlighter-rouge">biomaRt</code> package to extract this information.</p>
+
+<blockquote>
+  <p><em>NOTE:</em> Keep in mind that the Ensembl IDs listed in our Salmon output contained version numbers (i.e ENST00000632684.1). If we query Biomart with those IDs it will not return anything. Therefore, before querying Biomart in R do not forget to strip the version numbers from the Ensembl IDs.</p>
+</blockquote>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## DO NOT RUN</span><span class="w">
+
+</span><span class="c1"># Create a character vector of Ensembl IDs		</span><span class="w">
+</span><span class="n">ids</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.delim</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s2">"\t"</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="nb">T</span><span class="p">)</span><span class="w">    </span><span class="c1"># extract the transcript ids from one of the files</span><span class="w">
+</span><span class="n">ids</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="n">ids</span><span class="p">[,</span><span class="m">1</span><span class="p">])</span><span class="w">
+</span><span class="n">require</span><span class="p">(</span><span class="n">stringr</span><span class="p">)</span><span class="w">
+</span><span class="n">ids.strip</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">str_replace</span><span class="p">(</span><span class="n">ids</span><span class="p">,</span><span class="w"> </span><span class="s2">"([.][0-9])"</span><span class="p">,</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Create a mart object</span><span class="w">
+</span><span class="c1"># Note that we are using an archived host, since "www.ensembl.org" gave us an error</span><span class="w">
+</span><span class="n">mart</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">useDataset</span><span class="p">(</span><span class="s2">"hsapiens_gene_ensembl"</span><span class="p">,</span><span class="w"> </span><span class="n">useMart</span><span class="p">(</span><span class="s2">"ENSEMBL_MART_ENSEMBL"</span><span class="p">,</span><span class="w"> </span><span class="n">host</span><span class="o">=</span><span class="s2">"mar2016.archive.ensembl.org"</span><span class="p">))</span><span class="w">
+
+</span><span class="c1"># Get official gene symbol and Ensembl gene IDs</span><span class="w">
+</span><span class="n">tx2gene</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">getBM</span><span class="p">(</span><span class="w">
+    </span><span class="n">filters</span><span class="o">=</span><span class="w"> </span><span class="s2">"ensembl_transcript_id"</span><span class="p">,</span><span class="w"> 
+     </span><span class="n">attributes</span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"ensembl_transcript_id"</span><span class="p">,</span><span class="w"> </span><span class="s2">"external_gene_name"</span><span class="p">),</span><span class="w">
+     </span><span class="n">values</span><span class="o">=</span><span class="w"> </span><span class="n">ids.strip</span><span class="p">,</span><span class="w">
+     </span><span class="n">mart</span><span class="o">=</span><span class="w"> </span><span class="n">mart</span><span class="p">)</span><span class="w">
+     
+</span></code></pre></div></div>
+
+<p><strong>We have already run the above code for you and saved the output in a text file which is in the salmon directory.</strong> Load it in using:</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">tx2gene</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.delim</span><span class="p">(</span><span class="s2">"tx2gene.txt"</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s2">"\t"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><strong>Step 4:</strong> Run tximport to summarize gene-level information</p>
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">?</span><span class="n">tximport</span><span class="w">   </span><span class="c1"># let's take a look at the arguments for the tximport function</span><span class="w">
+
+</span><span class="n">txi</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">tximport</span><span class="p">(</span><span class="n">files</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s2">"salmon"</span><span class="p">,</span><span class="w"> </span><span class="n">txIn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">txOut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">,</span><span class="w"> </span><span class="n">tx2gene</span><span class="o">=</span><span class="n">tx2gene</span><span class="p">,</span><span class="w"> </span><span class="n">reader</span><span class="o">=</span><span class="n">read_tsv</span><span class="p">,</span><span class="w"> </span><span class="n">ignoreTxVersion</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+<h3 id="output-from-tximport">Output from <code class="language-plaintext highlighter-rouge">tximport</code></h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">txi</code> object is a simple list with three matrices: abundance, counts, length.</p>
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">attributes</span><span class="p">(</span><span class="n">txi</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+<p>A final element ‘countsFromAbundance’ carries through the character argument used in the tximport call. The length matrix contains the average transcript length for each gene which can be used as an offset for gene-level analysis.</p>
+
+<h3 id="using-deseq2-for-de-analysis-with-pseudocounts">Using DESeq2 for DE analysis with pseudocounts</h3>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## Create a sampletable/metadata</span><span class="w">
+
+</span><span class="c1"># Before we create this metadata object, let's see what the sample (column) order of the counts matrix is:</span><span class="w">
+</span><span class="n">colnames</span><span class="p">(</span><span class="n">txi</span><span class="o">$</span><span class="n">counts</span><span class="p">)</span><span class="w">
+
+</span><span class="n">condition</span><span class="o">=</span><span class="n">factor</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="s2">"Ctl"</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="s2">"KD"</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="s2">"OE"</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">)))</span><span class="w">
+</span><span class="n">sampleTable</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span><span class="w"> </span><span class="n">row.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colnames</span><span class="p">(</span><span class="n">txi</span><span class="o">$</span><span class="n">counts</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">## Create a DESeqDataSet object</span><span class="w">
+</span><span class="n">dds</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">DESeqDataSetFromTximport</span><span class="p">(</span><span class="n">txi</span><span class="p">,</span><span class="w"> </span><span class="n">sampleTable</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">condition</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now you have created a DESeq object to proceed with DE analysis you can now complete the DE analysis using methods in the script we ran
+for the counts from STAR.</p>
+
+<h3 id="resources-for-r">Resources for R</h3>
+
+<ul>
+  <li>https://www.datacamp.com/courses/free-introduction-to-r</li>
+  <li>Software Carpentry materials: http://swcarpentry.github.io/r-novice-inflammation/</li>
+  <li>Data Carpentry materials: http://tracykteal.github.io/R-genomics/</li>
+  <li>Materials from IQSS at Harvard: http://tutorials.iq.harvard.edu/R/Rintro/Rintro.html</li>
+  <li><a href="http://swirlstats.com/">swirl</a>: learn R interactively from within the R console</li>
+  <li>The free “try R” class from <a href="http://tryr.codeschool.com">Code School</a></li>
+  <li>HarvardX course <a href="https://courses.edx.org/courses/HarvardX/PH525.1x/1T2015/info">“Statistics and R for the Life Sciences”</a></li>
+</ul>
+
+<hr />
+<p><em>This lesson has been developed by members of the teaching team at the <a href="http://bioinformatics.sph.harvard.edu/">Harvard Chan Bioinformatics Core (HBC)</a>. These are open access materials distributed under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a> (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</em></p>
+
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc">modified-intro-to-rnaseq-hpc</a> is maintained by <a href="https://github.com/esallychang">esallychang</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>

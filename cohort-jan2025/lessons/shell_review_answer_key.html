@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>The Shell Review Answer Key | GitHub Pages Test</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="The Shell Review Answer Key" />
+<meta name="author" content="Mary Piper, Radhika Khetani, Meeta Mistry, Jihe Liu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction to bulk RNA-seq" />
+<meta property="og:description" content="Introduction to bulk RNA-seq" />
+<link rel="canonical" href="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/shell_review_answer_key.html" />
+<meta property="og:url" content="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/shell_review_answer_key.html" />
+<meta property="og:site_name" content="GitHub Pages Test" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-10-26T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="The Shell Review Answer Key" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Mary Piper, Radhika Khetani, Meeta Mistry, Jihe Liu"},"dateModified":"2020-10-26T00:00:00+00:00","datePublished":"2020-10-26T00:00:00+00:00","description":"Introduction to bulk RNA-seq","headline":"The Shell Review Answer Key","mainEntityOfPage":{"@type":"WebPage","@id":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/shell_review_answer_key.html"},"url":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/shell_review_answer_key.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/modified-intro-to-rnaseq-hpc/cohort-jan2025/assets/css/style.css?v=8eca8df006e778863fd37408e6d5e641f557c872">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/modified-intro-to-rnaseq-hpc/cohort-jan2025/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">The Shell Review Answer Key</h1>
+      <h2 class="project-tagline">Introduction to bulk RNA-seq</h2>
+      
+        <a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h2 id="learning-objectives">Learning Objectives</h2>
+<ul>
+  <li>Review shell commands and concepts</li>
+</ul>
+
+<h2 id="setting-up">Setting up</h2>
+
+<p>The Introduction to RNA-seq workshop assumes that you have either a) taken our <a href="https://hbctraining.github.io/Intro-to-shell-flipped/schedule/">Introduction to command-line interface workshop</a> or b) been working on the command-line and are already fluent with shell/bash. <strong>We ask that you complete the exercises below</strong>, to refresh some basic commands that you will be using over the course of the workshop. For each section we have relevant materials linked as a helpful reference.</p>
+
+<h3 id="opening-up-a-terminal-window">Opening up a terminal window</h3>
+
+<blockquote>
+  <p><em>NOTE: This mandatory pre-work does not require you to login to the O2 cluster.</em></p>
+</blockquote>
+
+<p>On your local laptop, you will need to open up your terminal window. This will be different depending on what kind of operating system (OS) you are working on.</p>
+
+<p><strong>With Mac OS</strong></p>
+
+<p>Macs have a utility application called “<strong>Terminal</strong>” for performing tasks on the command line (shell), both locally and on remote machines.</p>
+
+<p>Please find and open the Terminal utility on your computers using the <em>Spotlight Search</em> at the top right hand corner of your screen.</p>
+
+<p><strong>With Windows OS</strong></p>
+
+<p>By default, there is no built-in Terminal that uses the bash shell on the Windows OS. So, we will be using a downloaded program called “<strong>Git BASH</strong>” which is part of the <a href="https://git-for-windows.github.io/">Git for Windows</a> tool set. <strong>Git BASH is a shell/bash emulator.</strong> What this means is that it shows you a very similar interface to, and provides you the functionality of, the Terminal utility found on the Mac and Linux Operating systems.</p>
+
+<p>Please find and open Git BASH.</p>
+
+<blockquote>
+  <p><strong>Tip</strong> - Windows users can use another program called <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">Putty</a> instead of a <em>bash emulator</em> to log in to remote machines, but it is a little more involved and has different capabilities. We encourage you to take a look at it, but we will not be covering it in this workshop.</p>
+</blockquote>
+
+<h3 id="downloading-the-example-data-folder">Downloading the example data folder</h3>
+
+<p>The data you will be working with can be downloaded using the link below. Clicking on the link will automatically place a file called <code class="language-plaintext highlighter-rouge">unix_lesson.zip</code> to your <code class="language-plaintext highlighter-rouge">Downloads</code> folder on your computer.</p>
+
+<ul>
+  <li><a href="https://github.com/hbctraining/Training-modules/blob/master/Intro_shell/data/unix_lesson.zip?raw=true">Introduction to Shell: Dataset</a></li>
+</ul>
+
+<p>Now, in you terminal window change directories into your <code class="language-plaintext highlighter-rouge">Downloads</code> folder and check that the file is listed there:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> ~/Downloads
+<span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-l</span> unix_lesson.zip
+</code></pre></div></div>
+
+<p>To decompress the file into a folder called <code class="language-plaintext highlighter-rouge">unix_lesson</code> we use the <code class="language-plaintext highlighter-rouge">unzip</code> command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>unzip unix_lesson.zip
+</code></pre></div></div>
+
+<p>Check to see that you have the folder <code class="language-plaintext highlighter-rouge">unix_lesson</code> before proceeding.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span> <span class="nt">-l</span> unix_lesson
+</code></pre></div></div>
+
+<h2 id="reviewing-shell-commands">Reviewing shell commands</h2>
+
+<h3 id="shell-basics">Shell basics</h3>
+<p>We are going to start this review with some basic commands pertaining to navigating around the filesystem. Helpful reference materials are listed below:</p>
+
+<ul>
+  <li><a href="https://hbctraining.github.io/Intro-to-shell-flipped//lessons/01_the_filesystem.html">Introduction to Shell</a></li>
+  <li><a href="https://hbctraining.github.io/Intro-to-shell-flipped/lessons/02_wildcards_shortcuts.html">Wildcards and shortcuts in Shell</a></li>
+  <li><a href="https://hbctraining.github.io/Intro-to-shell-flipped/lessons/03_working_with_files.html">Examining and creating files</a></li>
+</ul>
+
+<ol>
+  <li>Change directory into the <code class="language-plaintext highlighter-rouge">unix_lesson/</code> directory.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd </span>unix_lesson
+</code></pre></div>    </div>
+  </li>
+  <li>Take a quick look at the <code class="language-plaintext highlighter-rouge">Mov10_oe_1.subset.fq</code> file (located in <code class="language-plaintext highlighter-rouge">raw_fastq</code> directory) using <code class="language-plaintext highlighter-rouge">less</code> from <code class="language-plaintext highlighter-rouge">unix_lesson/</code>, without changing directories.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>less raw_fastq/Mov10_oe_1.subset.fq
+</code></pre></div>    </div>
+  </li>
+  <li>Use a shortcut to move out of the directory to the parent of <code class="language-plaintext highlighter-rouge">unix_lesson/</code>.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> ..
+</code></pre></div>    </div>
+  </li>
+  <li>Change directories into the <code class="language-plaintext highlighter-rouge">raw_fastq/</code> folder with a single command.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd </span>unix_lesson/raw_fastq/
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>What does the <code class="language-plaintext highlighter-rouge">~</code> in the command prompt mean?
+Answer: <code class="language-plaintext highlighter-rouge">~</code> means home directory.</p>
+  </li>
+  <li>
+    <p>What is the full path to the <code class="language-plaintext highlighter-rouge">unix_lesson</code> directory?
+Answer: <code class="language-plaintext highlighter-rouge">/Users/your_username/Downloads/unix_lesson</code> (<strong>the result will vary based on your computer’s file system</strong>)</p>
+  </li>
+  <li>List all the files in the <code class="language-plaintext highlighter-rouge">raw_fastq</code> directory.
+```bash
+    <h1 id="option-1-you-can-navigate-to-the-raw_fastq-directory-and-say">(option 1) You can navigate to the <code class="language-plaintext highlighter-rouge">raw_fastq</code> directory and say</h1>
+    <p>$ ls -l</p>
+  </li>
+</ol>
+
+<h1 id="option-2-you-can-identify-your-location-and-give-the-full-or-relative-path-to-raw_fastq">(option 2) You can identify your location and give the full or relative path to raw_fastq</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+8. Modify the above command using the `*` wildcard to only list those files that have "oe" in their names.
+```bash
+# (option 1) You can navigate to the `raw_fastq` directory and say
+$ ls -l *oe* 
+
+# (option 2) You can identify your location and give the full or relative path to raw_fastq
+</code></pre></div></div>
+
+<ol>
+  <li>How many and which commands have you run so far?
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">history</span>
+</code></pre></div>    </div>
+    <p>Answer: Result will vary based on your activity.</p>
+  </li>
+</ol>
+
+<h3 id="searching-and-redirection">Searching and redirection</h3>
+<p>Next, we will search our files for specific patterns and redirect the results to file. Helpful reference materials are listed below:</p>
+
+<ul>
+  <li><a href="https://hbctraining.github.io/Intro-to-shell-flipped/lessons/04_searching_files.html">Searching and redirection</a></li>
+</ul>
+
+<ol>
+  <li>Create a new directory called <code class="language-plaintext highlighter-rouge">shell_review/</code> within the <code class="language-plaintext highlighter-rouge">unix_lesson/</code> directory.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># First make sure that you navigate to the `unix_lesson/` directory</span>
+<span class="nv">$ </span><span class="nb">mkdir </span>shell_review
+</code></pre></div>    </div>
+  </li>
+  <li>Search the file <code class="language-plaintext highlighter-rouge">unix_lesson/reference_data/chr1-hg19_genes.gtf</code> for lines containing the string “MOV10”. Save the output in the <code class="language-plaintext highlighter-rouge">shell_review/</code> directory with a new name - “Mov10_hg19.gtf”.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># First make sure that you navigate to the `unix_lesson/` directory</span>
+<span class="nv">$ </span><span class="nb">grep </span>MOV10 reference_data/chr1-hg19_genes.gtf <span class="o">&gt;</span> shell_review/Mov10_hg19.gtf
+</code></pre></div>    </div>
+  </li>
+  <li>Use <code class="language-plaintext highlighter-rouge">vim</code> to open the newly created file <code class="language-plaintext highlighter-rouge">unix_lesson/shell_review/Mov10_hg19.gtf</code> and add a comment at the top specifying how this file was created and the source of the content. Save the modified file and quit <code class="language-plaintext highlighter-rouge">vim</code>.</li>
+</ol>
+
+<p>Answer:</p>
+<ul>
+  <li>Open file - <code class="language-plaintext highlighter-rouge">vim shell_review/Mov10_hg19.gtf</code></li>
+  <li>Edit file - <code class="language-plaintext highlighter-rouge">i</code>- Add text using <code class="language-plaintext highlighter-rouge">#</code> to indicate comment</li>
+  <li>Exit edit mode - <code class="language-plaintext highlighter-rouge">esc</code></li>
+  <li>Save and quit - <code class="language-plaintext highlighter-rouge">:wq</code>.</li>
+</ul>
+
+<ol>
+  <li>In the new file “Mov10_hg19.gtf”, how many lines contain the word “exon”?
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># First make sure that you navigate to the `unix_lesson/` directory</span>
+<span class="nv">$ </span><span class="nb">grep </span>exon shell_review/Mov10_hg19.gtf | <span class="nb">wc</span> <span class="nt">-l</span>
+</code></pre></div>    </div>
+    <p>Answer: 42</p>
+  </li>
+</ol>
+
+<h3 id="loops-and-shell-scripts">Loops and shell scripts</h3>
+
+<ul>
+  <li><a href="https://hbctraining.github.io/Intro-to-shell-flipped/lessons/05_shell-scripts_variable.html">Shell scripts and variables in Shell</a></li>
+  <li><a href="https://hbctraining.github.io/Intro-to-shell-flipped/lessons/06_loops_and_automation.html">Loops and automation</a></li>
+</ul>
+
+<ol>
+  <li>Use the <code class="language-plaintext highlighter-rouge">for</code> loop to iterate over each FASTQ file in <code class="language-plaintext highlighter-rouge">raw_fastq</code> and do the following:
+    <ul>
+      <li>Print the name of the current file</li>
+      <li>Generate a prefix to use for naming our output files, and store it inside a variable called <code class="language-plaintext highlighter-rouge">sample</code>.</li>
+      <li>Dump out the first 40 lines into a new file that will be saved in <code class="language-plaintext highlighter-rouge">shell_review</code></li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># First make sure that you navigate to the `raw_fastq/` directory</span>
+<span class="nv">$ </span><span class="k">for </span>file <span class="k">in</span> <span class="k">*</span>fq
+<span class="o">&gt;</span> <span class="k">do</span> 
+<span class="o">&gt;</span> <span class="nb">echo</span> <span class="nv">$file</span>
+<span class="o">&gt;</span> <span class="nv">sample</span><span class="o">=</span><span class="sb">`</span><span class="nb">basename</span> <span class="nv">$file</span> .subset.fq<span class="sb">`</span>
+<span class="o">&gt;</span> <span class="nb">head</span> <span class="nt">-n</span> 40 <span class="nv">$file</span> <span class="o">&gt;</span> ../shell_review/<span class="k">${</span><span class="nv">sample</span><span class="k">}</span>_first40.fq
+<span class="o">&gt;</span> <span class="k">done</span>
+</code></pre></div></div>
+<ol>
+  <li>Place the above <code class="language-plaintext highlighter-rouge">for</code> loop into a shell script using <code class="language-plaintext highlighter-rouge">vim</code> and run it.</li>
+</ol>
+
+<p>Answer: Navigate to the <code class="language-plaintext highlighter-rouge">raw_fastq/</code> directory, and create a script <code class="language-plaintext highlighter-rouge">vim generate_first40.sh</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash </span>
+<span class="k">for </span>file <span class="k">in</span> <span class="k">*</span>fq
+<span class="k">do 
+</span><span class="nb">echo</span> <span class="nv">$file</span>
+<span class="nv">sample</span><span class="o">=</span><span class="sb">`</span><span class="nb">basename</span> <span class="nv">$file</span> .subset.fq<span class="sb">`</span>
+<span class="nb">head</span> <span class="nt">-n</span> 40 <span class="nv">$file</span> <span class="o">&gt;</span> ../shell_review/<span class="k">${</span><span class="nv">sample</span><span class="k">}</span>_first40.fq
+<span class="k">done</span>
+</code></pre></div></div>
+<p>Run the script with the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>sh generate_first40.sh
+</code></pre></div></div>
+
+<h3 id="permissions">Permissions</h3>
+
+<ul>
+  <li><a href="https://hbctraining.github.io/Intro-to-shell-flipped/lessons/07_permissions_and_environment_variables.html#permissions">Interpreting the permissions string</a></li>
+</ul>
+
+<p>There is a folder in the HBC training shared space on the O2 cluster called <code class="language-plaintext highlighter-rouge">intro_rnaseq_hpc</code>. Below we have displayed a long listing of its contents.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>total 714
+drwxrwsr-x  3 mm573 hbctraining 1111 Aug 22  2017 bam_STAR
+drwxrwsr-x  8 mp298 hbctraining 1914 May 21  2018 bam_STAR38
+drwxrwsr-x  2 mm573 hbctraining  522 Oct  6  2015 bam_tophat
+drwxrwsr-x  2 mm573 hbctraining  240 Oct 19  2015 counts
+drwxrwsr-x  2 mm573 hbctraining  260 Oct 19  2015 counts_STAR
+<span class="nt">-rw-rw-r--</span>  1 mm573 hbctraining 2416 Aug 22  2017 DE_script.R
+<span class="nt">-rw-rw-r--</span>  1 mm573 hbctraining 2064 Mar 28  2018 DESeq2_script.R
+drwxrwsr-x  2 mm573 hbctraining  705 Oct  6  2015 fastqc
+drwxrwsr-x  2 mm573 hbctraining  272 Jan 31  2018 full_dataset
+<span class="nt">-rw-rw-r--</span>  1 mm573 hbctraining  216 Nov 10  2015 install_libraries.R
+<span class="nt">-rw-rw-r--</span>  1 mm573 hbctraining  117 Oct 19  2015 install_libraries.sh
+drwxrwsr-x 78 mm573 hbctraining 1969 Aug 22  2017 R-3.3.1
+drwxrwsr-x  3 mp298 hbctraining  234 Feb 27  2019 reference_data_ensembl38
+drwxrwsr-x  2 mm573 hbctraining  555 Oct  5  2015 reference_STAR
+drwxrwsr-x  2 rsk27 hbctraining  260 Aug 22  2017 salmon.ensembl37.idx
+drwxrwsr-x  2 mm573 hbctraining  306 Oct  6  2015 trimmed_fastq
+
+</code></pre></div></div>
+
+<ol>
+  <li>How many owners have files in this folder?</li>
+</ol>
+
+<p>Answer: 3</p>
+
+<ol>
+  <li>How many groups?</li>
+</ol>
+
+<p>Answer: 1</p>
+
+<ol>
+  <li>Are there any executable <em>files</em> in this folder?</li>
+</ol>
+
+<p>Answer: No</p>
+
+<ol>
+  <li>What kind of access does the user <code class="language-plaintext highlighter-rouge">mm573</code> have to the <code class="language-plaintext highlighter-rouge">full_dataset/</code> directory?</li>
+</ol>
+
+<p>Answer: r(read), w(write/edit), and x(execute).</p>
+
+<ol>
+  <li>You are considered as “other” or everyone else on this system (i.e you are not part of the group <code class="language-plaintext highlighter-rouge">hbctraining</code>. What command would allow the user <code class="language-plaintext highlighter-rouge">mm573</code> do to take away your ability to look inside the <code class="language-plaintext highlighter-rouge">full_dataset/</code> directory?</li>
+</ol>
+
+<p>Answer: chmod o-r full_dataset/</p>
+
+<h3 id="environment-variables">Environment variables</h3>
+
+<ul>
+  <li><a href="https://hbctraining.github.io/Intro-to-shell-flipped/lessons/07_permissions_and_environment_variables.html#environment-variables">Understanding environment variables</a></li>
+</ul>
+
+<ol>
+  <li>Display the contents of the <code class="language-plaintext highlighter-rouge">$HOME</code> variable on your computer.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$HOME</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Use the <code class="language-plaintext highlighter-rouge">which</code> command to check where the executable file for the <code class="language-plaintext highlighter-rouge">pwd</code> command lives in the directory structure.
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>which <span class="nb">pwd</span>
+</code></pre></div>    </div>
+  </li>
+  <li>How does shell know where to find the executable file for the <code class="language-plaintext highlighter-rouge">pwd</code> command?</li>
+</ol>
+
+<p>Answer: the shell searches through each path in $PATH until it finds an executable file for the <code class="language-plaintext highlighter-rouge">pwd</code> command.</p>
+
+<ol>
+  <li>Display the contents of the variable that stores the various paths to folders containing executable command files.</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$PATH</span>
+</code></pre></div></div>
+
+<hr />
+
+<p><em>This lesson has been developed by members of the teaching team at the <a href="http://bioinformatics.sph.harvard.edu/">Harvard Chan Bioinformatics Core (HBC)</a>. These are open access materials distributed under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a> (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</em></p>
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc">modified-intro-to-rnaseq-hpc</a> is maintained by <a href="https://github.com/esallychang">esallychang</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>

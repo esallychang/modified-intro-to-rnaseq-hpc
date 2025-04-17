@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Data Management and Project Organization - In-class | GitHub Pages Test</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Data Management and Project Organization - In-class" />
+<meta name="author" content="Modified by Sally Chang @ NICHD" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction to bulk RNA-seq" />
+<meta property="og:description" content="Introduction to bulk RNA-seq" />
+<link rel="canonical" href="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/04b_data_organization.html" />
+<meta property="og:url" content="https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/04b_data_organization.html" />
+<meta property="og:site_name" content="GitHub Pages Test" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-10-01T00:00:00+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Data Management and Project Organization - In-class" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Modified by Sally Chang @ NICHD"},"dateModified":"2024-10-01T00:00:00+00:00","datePublished":"2024-10-01T00:00:00+00:00","description":"Introduction to bulk RNA-seq","headline":"Data Management and Project Organization - In-class","mainEntityOfPage":{"@type":"WebPage","@id":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/04b_data_organization.html"},"url":"https://esallychang.github.io/modified-intro-to-rnaseq-hpc/cohort-jan2025/lessons/04b_data_organization.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/modified-intro-to-rnaseq-hpc/cohort-jan2025/assets/css/style.css?v=8eca8df006e778863fd37408e6d5e641f557c872">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/modified-intro-to-rnaseq-hpc/cohort-jan2025/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">Skip to the content.</a>
+
+    <header class="page-header" role="banner">
+      <h1 class="project-name">Data Management and Project Organization - In-class</h1>
+      <h2 class="project-tagline">Introduction to bulk RNA-seq</h2>
+      
+        <a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc" class="btn">View on GitHub</a>
+      
+      
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <h2 id="learning-objectives">Learning Objectives</h2>
+
+<ul>
+  <li>Describe the example RNA-seq experiment and its objectives.</li>
+  <li>Demonstrate strategies for good data management and project organization.</li>
+</ul>
+
+<h2 id="the-dataset">The Dataset</h2>
+
+<p>The dataset we are using for this workshop is part of a larger study described in <a href="http://www.ncbi.nlm.nih.gov/pubmed/25464849">Kenny PJ et al., <em>Cell Rep</em> 2014</a>.
+The authors are investigating interactions between various genes involved in Fragile X syndrome, a disease of aberrant protein production, which results in cognitive impairment and autistic-like features.
+<strong>The authors sought to show that RNA helicase MOV10 regulates the translation of RNAs involved in Fragile X syndrome.</strong></p>
+
+<h3 id="raw-data">Raw data</h3>
+
+<p>From this study we are using the <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE50499">RNA-seq</a> data which is publicly available in the <a href="https://www.ncbi.nlm.nih.gov/sra/?term=SRP029367">Sequence Read Archive (SRA)</a>.</p>
+
+<blockquote>
+  <p><strong>NOTE:</strong> If you are interested in how to obtain publicly available sequence data from the SRA we have some materials on this <a href="https://hbctraining.github.io/Accessing_public_genomic_data/lessons/downloading_from_SRA.html">linked here</a>.</p>
+</blockquote>
+
+<h3 id="metadata">Metadata</h3>
+
+<p>In addition to the raw sequence data we also need to collect <strong>information about the data</strong>, also known as <strong>metadata</strong>.
+We are usually quick to want to begin analysis of the sequence data (FASTQ files), but how useful is it if we know nothing about the samples that this sequence data originated from?</p>
+
+<p>Some relevant metadata for our dataset is provided below:</p>
+
+<ul>
+  <li>The RNA was extracted from <strong>HEK293F cells</strong> that were transfected with a <strong>MOV10 transgene</strong>, <strong>MOV10 siRNA</strong>, or an <strong>irrelevant siRNA</strong>. (<em>For this workshop we won’t be using the MOV10 knock down samples.</em>)</li>
+  <li>The libraries for this dataset are <strong>stranded</strong> and were generated using the standard Tru-seq prep kit (using the dUTP method).</li>
+  <li>Sequencing was carried out on the <strong>Illumina HiSeq-2500</strong> and <strong>100bp single end</strong> reads were generated.</li>
+  <li>The full dataset was sequenced to <strong>~40 million reads</strong> per sample, but for this workshop we will be looking at a small subset on chr1 (~300,000 reads/sample).</li>
+  <li>For each group we have three replicates as described in the figure below.</li>
+</ul>
+
+<p align="center">
+
+<img src="../img/exp_design.png" width="700" />
+
+</p>
+
+<h2 id="implementing-data-management-best-practices">Implementing data management best practices</h2>
+
+<p>In a <a href="https://hbctraining.github.io/Intro-to-rnaseq-hpc-salmon-flipped/lessons/04a_data_organization.html">previous lesson</a> we describe the data lifecycle and the <strong>different aspects to consider when working on your own projects</strong>.
+Here, we implement some of those strategies to get ourselves setup before we begin with any analysis.</p>
+
+<p align="center">
+
+<img src="../img/data-lifecycle-base.png" width="500" />
+
+</p>
+
+<p><em>Image acquired from the <a href="https://datamanagement.hms.harvard.edu/data-lifecycle">Harvard Biomedical Data Management Website</a></em></p>
+
+<h3 id="planning-and-organization">Planning and organization</h3>
+
+<p>For each experiment you work on and analyze data for, it is considered best practice to get organized by creating a planned storage space (directory structure).
+We will start by creating a directory that we can use for the rest of the workshop.
+First, make sure that you are in your home directory.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span>
+<span class="nv">$ </span><span class="nb">pwd</span>
+</code></pre></div></div>
+
+<p>This should return <code class="language-plaintext highlighter-rouge">/data/$USER/rc_training</code>.
+Create the directory <code class="language-plaintext highlighter-rouge">rnaseq</code> and move into it.
+<strong><em>We will need to edit this directory path based on how Biowulf wants us to organize things.</em></strong></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">mkdir </span>rnaseq
+<span class="nv">$ </span><span class="nb">cd </span>rnaseq
+</code></pre></div></div>
+
+<p>Next, we will create a project directory and set up the following structure to keep our files organized.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rnaseq
+  ├── logs
+  ├── meta
+  ├── raw_data  
+  ├── results
+  └── scripts
+</code></pre></div></div>
+
+<p><em>This is a generic structure and can be tweaked based on personal preference and the analysis workflow.</em></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">logs</code>: to keep track of the commands run and the specific parameters used, but also to have a record of any standard output that is generated while running the command. <strong><em>Not totally sure we need this one if we are keeping a work log</em></strong></li>
+  <li><code class="language-plaintext highlighter-rouge">meta</code>: for any information that describes the samples you are using, which we refer to as <a href="https://datamanagement.hms.harvard.edu/metadata-overview">metadata</a>.</li>
+  <li><code class="language-plaintext highlighter-rouge">raw_data</code>: for any <strong>unmodified</strong> (raw) data obtained prior to computational analysis here, e.g. FASTQ files from the sequencing center. We strongly recommend leaving this directory unmodified through the analysis.</li>
+  <li><code class="language-plaintext highlighter-rouge">results</code>: for output from the different tools you implement in your workflow. Create sub-folders specific to each tool/step of the workflow within this folder.</li>
+  <li><code class="language-plaintext highlighter-rouge">scripts</code>: for scripts that you write and use to run analyses/workflow.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">mkdir </span>logs meta raw_data results scripts
+</code></pre></div></div>
+
+<blockquote>
+  <h4 id="file-naming-conventions">File naming conventions</h4>
+
+  <p>Another aspect of staying organized is making sure that all the directories and filenames for an analysis are as consistent as possible.
+You want to avoid names like <code class="language-plaintext highlighter-rouge">alignment1.bam</code>, and rather have names like <code class="language-plaintext highlighter-rouge">20170823_kd_rep1_gmap-1.4.bam</code> which provide a basic level of information about the file.
+<a href="https://datamanagement.hms.harvard.edu/file-naming-conventions">This link</a> and <a href="http://www2.stat.duke.edu/~rcs46/lectures_2015/01-markdown-git/slides/naming-slides/naming-slides.pdf">this slideshow</a> have some good guidelines for file naming dos and don’ts.</p>
+</blockquote>
+
+<h3 id="documentation-worklog-and-readme-files">Documentation: Worklog and README files</h3>
+
+<p>In your lab notebook, you likely keep track of the different reagents and kits used for a specific protocol.
+Similarly, recording information about the tools used in the workflow is important for documenting your computational experiments.</p>
+
+<p>Here are some things you might want to make a note of:</p>
+
+<ul>
+  <li>
+    <p><strong>Make note of the software you use.</strong> Do your research and find out what tools are best for the data you are working with.
+Don’t just work with tools that you are able to easily install.</p>
+  </li>
+  <li>
+    <p><strong>Keep track of software versions.</strong> Keep up with the literature and make sure you are using the most up-to-date versions.</p>
+  </li>
+  <li>
+    <p><strong>Record information on parameters used and summary statistics</strong> at every step (e.g., how many adapters were removed, how many reads did not align)</p>
+  </li>
+  <li>
+    <p><strong>Test datasets:</strong> A general rule of thumb is to test on a single sample or a subset of the data before running your entire dataset through.
+This will allow you to debug quicker and give you a chance to also get a feel for the tool and the different parameters.</p>
+  </li>
+  <li>
+    <p><strong>Error and log messages</strong>: Different tools have different ways of reporting log messages to the terminal.
+You might have to experiment a bit to figure out what output to capture.
+You can redirect standard output with the <code class="language-plaintext highlighter-rouge">&gt;</code> symbol which is equivalent to <code class="language-plaintext highlighter-rouge">1&gt; (standard out)</code>; other tools might require you to use <code class="language-plaintext highlighter-rouge">2&gt;</code> to re-direct the <code class="language-plaintext highlighter-rouge">standard error</code> instead.</p>
+  </li>
+</ul>
+
+<h4 id="creating-a-worklog">Creating a Worklog</h4>
+
+<p>The BSPC uses a <em>Work Log</em> for each project that they work on.
+This is a file that lives in the top directory for a project (i.e. <code class="language-plaintext highlighter-rouge">rnaseq</code> in our case), and has the following attributes:</p>
+
+<ul>
+  <li>Named <code class="language-plaintext highlighter-rouge">WORKLOG.rst</code> to make it easy to find across projects</li>
+  <li>Use ReStructured Text format (<code class="language-plaintext highlighter-rouge">.rst</code> files), because this allows for more flexible documentation and parsing down the line</li>
+  <li>Start each entry with a date, in YYYY-MM-DD format, underlined with hyphens</li>
+  <li>Then a blank line</li>
+  <li>Then your username prefixed with an \@</li>
+  <li>Then arbitrary text describing what you did that day.</li>
+  <li>Keeps everything in chronological order, so the latest entry is at the bottom</li>
+</ul>
+
+<p>For example, the top of my Work Log for the <code class="language-plaintext highlighter-rouge">rnaseq</code> project looks like:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2024-10-03
+<span class="nt">----------</span>
+
+@changes
+
+- Created directory structure, README, and Work Log
+</code></pre></div></div>
+
+<p>The audience is you (or another lab member) 2 years from now when everyone has forgotten about the project and now needs to start working on it again.
+As you are writing, it will feel like you are writing too much or adding way too much detail.
+You are not.
+<strong>The future you will thank you.</strong></p>
+
+<p>Feel free to keep an informal, conversational tone.
+This is not a public document.
+<em>But do get in the habit of adding a note each time you work on a project!</em></p>
+
+<h4 id="readme-files">README files</h4>
+
+<p>After setting up the directory structure it is useful to have a <a href="https://datamanagement.hms.harvard.edu/readme-files"><strong>README file</strong></a> <strong>within your project directory</strong>.
+This is a plain text file containing a short summary about the project and a description of the files/directories found within it.
+An example README is shown below.
+It can also be helpful to include a README within each sub-directory with any information pertaining to the analysis.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## README ##
+## This directory contains data generated during the Introduction to RNA-seq workshop
+## Date: 
+
+There are five subdirectories in this directory:
+
+raw_data : contains raw data
+meta:  contains...
+logs:
+results:
+scripts:
+</code></pre></div></div>
+
+<hr />
+
+<p><strong>Exercise</strong></p>
+
+<ol>
+  <li>Take a moment to create a README for the <code class="language-plaintext highlighter-rouge">rnaseq/</code> folder (hint: use <code class="language-plaintext highlighter-rouge">vim</code> to create the file). Give a short description of the project and brief descriptions of the types of files you will be storing within each of the sub-directories.</li>
+  <li>Use the same strategy to create a <code class="language-plaintext highlighter-rouge">WORKLOG.rst file</code> and add your first entry about what you just accomplished.</li>
+</ol>
+
+<hr />
+
+<h3 id="obtaining-data">Obtaining data</h3>
+
+<p>Let’s populate the <code class="language-plaintext highlighter-rouge">rnaseq/</code> project with some data.
+Since we are taking this data from an external example, originally hosted at Harvard HPC, so a simple copy command (<code class="language-plaintext highlighter-rouge">cp</code>) will not suffice.
+To copy it over we are now going to use the <code class="language-plaintext highlighter-rouge">wget</code> command and a direct link to a zipped file, then unzip this file to get the raw sequencing files from amongst other files included in their lesson.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="c"># This is kind of annoying and unrealistic so let's put this somewhere on Biowulf or something else more realistic!</span>
+<span class="nv">$ </span><span class="c"># Start this in your rnaseq directory.</span>
+<span class="nv">$ </span>wget https://www.dropbox.com/s/x66jksdd4jklpdw/unix_lesson.zip
+<span class="nv">$ </span>unzip unix_lesson.zip
+<span class="nv">$ </span><span class="nb">cp </span>unix_lesson/raw_fastq/<span class="k">*</span>.fq 
+</code></pre></div></div>
+
+<p>Now the structure of <code class="language-plaintext highlighter-rouge">rnaseq/</code> should look like this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rnaseq
+  ├── logs
+  ├── meta
+  ├── raw_data
+  │   ├── Irrel_kd_1.subset.fq
+  │   ├── Irrel_kd_2.subset.fq
+  │   ├── Irrel_kd_3.subset.fq
+  │   ├── Mov10_oe_1.subset.fq
+  │   ├── Mov10_oe_2.subset.fq
+  │   └── Mov10_oe_3.subset.fq
+  ├── README.txt
+  ├── results
+  └── scripts
+</code></pre></div></div>
+
+<p>Okay, we are all set to begin the analysis!</p>
+
+<hr />
+
+<p><em>This lesson has been developed by members of the teaching team at the <a href="http://bioinformatics.sph.harvard.edu/">Harvard Chan Bioinformatics Core (HBC)</a>. These are open access materials distributed under the terms of the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a> (CC BY 4.0), which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</em></p>
+
+<ul>
+  <li><em>The materials used in this lesson were derived from work that is Copyright © Data Carpentry (<a href="http://datacarpentry.org/">http://datacarpentry.org/</a>). All Data Carpentry instructional material is made available under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a> (CC BY 4.0).</em></li>
+  <li><em>Adapted from the lesson by Tracy Teal. Original contributors: Paul Wilson, Milad Fatenejad, Sasha Wood and Radhika Khetani for Software Carpentry (<a href="http://software-carpentry.org/">http://software-carpentry.org/</a>)</em></li>
+</ul>
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/esallychang/modified-intro-to-rnaseq-hpc">modified-intro-to-rnaseq-hpc</a> is maintained by <a href="https://github.com/esallychang">esallychang</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
+      </footer>
+    </main>
+  </body>
+</html>
